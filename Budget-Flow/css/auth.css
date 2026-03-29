@@ -550,6 +550,13 @@ input:focus {
   border: 1px solid var(--success-border);
 }
 
+#reset-link-box a {
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: underline;
+  word-break: break-all;
+}
+
 /* =========================
    SUCCESS CARD
    ========================= */

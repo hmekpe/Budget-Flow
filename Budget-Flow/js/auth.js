@@ -163,6 +163,11 @@ const authRuntimeConfigPromise = loadAuthRuntimeConfig();
 
 const screens = document.querySelectorAll(".screen");
 const screenButtons = document.querySelectorAll("[data-screen]");
+const defaultSuccessState = {
+  title: "Check your inbox",
+  subtitle: "A password reset link has been sent successfully. Please check your email.",
+  note: "If local email delivery is unavailable, a direct reset link will appear here so you can continue testing safely."
+};
 
 function showScreen(screenId) {
   screens.forEach((screen) => screen.classList.remove("active"));
@@ -171,6 +176,8 @@ function showScreen(screenId) {
   if (target) target.classList.add("active");
 
   clearMessages();
+  resetSuccessScreen();
+  clearResetLinkBox();
   window.requestAnimationFrame(() => {
     renderGoogleButtons();
   });
@@ -193,6 +200,43 @@ function showMessage(id, text, type) {
   const box = document.getElementById(id);
   box.textContent = text;
   box.className = `message show ${type}`;
+}
+
+function resetSuccessScreen() {
+  const title = document.getElementById("success-title");
+  const subtitle = document.getElementById("success-subtitle");
+  const note = document.getElementById("success-note");
+
+  if (title) title.textContent = defaultSuccessState.title;
+  if (subtitle) subtitle.textContent = defaultSuccessState.subtitle;
+  if (note) note.textContent = defaultSuccessState.note;
+}
+
+function clearResetLinkBox() {
+  const box = document.getElementById("reset-link-box");
+  if (!box) return;
+
+  box.className = "message";
+  box.textContent = "";
+}
+
+function showResetLink(link) {
+  const box = document.getElementById("reset-link-box");
+  const title = document.getElementById("success-title");
+  const subtitle = document.getElementById("success-subtitle");
+  const note = document.getElementById("success-note");
+
+  if (!box || !link) return;
+
+  if (title) title.textContent = "Reset link ready";
+  if (subtitle) subtitle.textContent = "Email delivery was unavailable locally, so you can continue using the secure reset link below.";
+  if (note) note.textContent = "Use this direct link for local testing only. In production, password reset continues through email.";
+
+  box.className = "message show success";
+  box.innerHTML = `
+    <strong>Reset link</strong><br />
+    <a href="${link}" target="_self" rel="noopener noreferrer">${link}</a>
+  `;
 }
 
 document.querySelectorAll(".toggle-btn").forEach((button) => {
@@ -344,6 +388,9 @@ if (forgotForm) {
 
       setTimeout(() => {
         showScreen("success-screen");
+        if (data.resetLink) {
+          showResetLink(data.resetLink);
+        }
       }, 1200);
     } catch (error) {
       showMessage("forgot-message", error.message, "error");

@@ -7,6 +7,23 @@ const { signJwt, generateRandomToken, hashToken } = require("../utils/token");
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClient = googleClientId ? new OAuth2Client(googleClientId) : null;
 
+function hasMailConfig() {
+  return Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS && process.env.MAIL_FROM);
+}
+
+function isLocalClientUrl() {
+  const clientUrl = String(process.env.CLIENT_URL || "").trim().toLowerCase();
+  return clientUrl.includes("localhost") || clientUrl.includes("127.0.0.1");
+}
+
+function isLocalResetFallbackAllowed() {
+  return process.env.NODE_ENV !== "production" || isLocalClientUrl();
+}
+
+function shouldPreferDirectResetLink() {
+  return isLocalClientUrl() && process.env.NODE_ENV !== "production";
+}
+
 async function registerUser({ name, email, password }) {
   const existing = await pool.query("SELECT id FROM users WHERE email = $1", [email]);
 
@@ -94,24 +111,56 @@ async function forgotPassword(email) {
 
   const resetLink = `${process.env.CLIENT_URL}/pages/reset-password.html?token=${rawToken}`;
 
-  await transporter.sendMail({
-    from: process.env.MAIL_FROM,
-    to: user.email,
-    subject: "Budget Flow Password Reset",
-    html: `
-      <div style="font-family: Arial, sans-serif; color: #222;">
-        <h2>Reset your password</h2>
-        <p>Hello ${user.name},</p>
-        <p>Click the button below to reset your password. This link expires in 30 minutes.</p>
-        <p>
-          <a href="${resetLink}" style="display:inline-block;padding:12px 18px;background:#816DBC;color:#fff;text-decoration:none;border-radius:8px;">
-            Reset Password
-          </a>
-        </p>
-        <p>If you did not request this, you can ignore this email.</p>
-      </div>
-    `
-  });
+  if (shouldPreferDirectResetLink()) {
+    return {
+      message: "Local password reset link is ready below.",
+      resetLink,
+      deliveryMode: "direct-link"
+    };
+  }
+
+  if (!hasMailConfig()) {
+    if (isLocalResetFallbackAllowed()) {
+      return {
+        message: "Email sending is not configured locally. Use the reset link below.",
+        resetLink,
+        deliveryMode: "direct-link"
+      };
+    }
+
+    throw new Error("Password reset email is not configured on the server");
+  }
+
+  try {
+    await transporter.sendMail({
+      from: process.env.MAIL_FROM,
+      to: user.email,
+      subject: "Budget Flow Password Reset",
+      html: `
+        <div style="font-family: Arial, sans-serif; color: #222;">
+          <h2>Reset your password</h2>
+          <p>Hello ${user.name},</p>
+          <p>Click the button below to reset your password. This link expires in 30 minutes.</p>
+          <p>
+            <a href="${resetLink}" style="display:inline-block;padding:12px 18px;background:#816DBC;color:#fff;text-decoration:none;border-radius:8px;">
+              Reset Password
+            </a>
+          </p>
+          <p>If you did not request this, you can ignore this email.</p>
+        </div>
+      `
+    });
+  } catch (error) {
+    if (isLocalResetFallbackAllowed()) {
+      return {
+        message: "Email delivery failed locally. Use the reset link below.",
+        resetLink,
+        deliveryMode: "direct-link"
+      };
+    }
+
+    throw error;
+  }
 
   return { message: "If an account exists, a reset link has been sent" };
 }

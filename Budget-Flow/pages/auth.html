@@ -148,11 +148,12 @@
           <p class="eyebrow">PASSWORD RESET</p>
 
           <div class="success-card">
-            <div class="success-badge">✓</div>
-            <h2 class="title">Check your inbox</h2>
-            <p class="subtitle">A password reset link has been sent successfully. Please check your email.</p>
+            <div class="success-badge">&#10003;</div>
+            <h2 class="title" id="success-title">Check your inbox</h2>
+            <p class="subtitle" id="success-subtitle">A password reset link has been sent successfully. Please check your email.</p>
+            <div id="reset-link-box" class="message"></div>
             <button type="button" class="primary-btn" data-screen="login-screen">Back to Login</button>
-            <p class="small-note">This flow is fully connected to the backend and will send a real reset link when email is configured.</p>
+            <p class="small-note" id="success-note">If local email delivery is unavailable, a direct reset link will appear here so you can continue testing safely.</p>
           </div>
         </div>
 
