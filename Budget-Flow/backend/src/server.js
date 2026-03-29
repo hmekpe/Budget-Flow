@@ -1,4 +1,5 @@
 const path = require("path");
+const fs = require("fs");
 require("dotenv").config({ path: path.join(__dirname, "../.env") });
 
 const app = require("./app");
@@ -13,6 +14,8 @@ async function startServer() {
     }
 
     await pool.query("SELECT NOW()");
+    const schemaSql = fs.readFileSync(path.join(__dirname, "../sql/init.sql"), "utf8");
+    await pool.query(schemaSql);
     console.log("Connected to PostgreSQL database");
   } catch (error) {
     console.error("Database connection error:", error.message);
