@@ -1,0 +1,19 @@
+{
+  "name": "Budget Flow",
+  "short_name": "BudgetFlow",
+  "description": "Budget Flow helps you track transactions, manage budgets, review reports, and stay on top of savings from any device.",
+  "start_url": "/pages/auth.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0b0b18",
+  "theme_color": "#1C0859",
+  "icons": [
+    {
+      "src": "/assests/budget-flow-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

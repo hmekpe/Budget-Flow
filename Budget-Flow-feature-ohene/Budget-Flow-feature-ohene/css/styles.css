@@ -1,0 +1,755 @@
+/* Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #07003A;
+    font-family: 'DM Sans', sans-serif;
+    color: #ffffff;
+    min-height: 100vh;
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2e2e4d;
+    border-radius: 4px;
+}
+
+/* Navigation */
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #AFAED7;
+    font-size: 15px;
+    font-weight: 500;
+    margin: 2px 8px;
+}
+
+.nav-item:hover {
+    background: rgba(255,255,255,0.05);
+    color: #ffffff;
+}
+
+.nav-item.active {
+    background: rgba(124,77,255,0.12);
+    color: #ffffff;
+}
+
+/* Sidebar */
+.sidebar {
+    background: #0d0d1a;
+    border-right: 1px solid #1a1a2e;
+    width: 220px;
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Stat Cards */
+.stat-card {
+    background: rgba(217, 217, 217, 0.08);
+    border: 1px solid rgba(217, 217, 217, 0.15);
+    border-radius: 16px;
+    padding: 20px 24px;
+    flex: 1;
+}
+
+/* Weekly Chart */
+.day-bar-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    flex: 1;
+}
+
+.day-bar-bg {
+    width: 100%;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    position: relative;
+    overflow: hidden;
+    height: 56px;
+}
+
+.day-bar-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 8px;
+    transition: height 0.5s cubic-bezier(.4,0,.2,1);
+}
+
+/* Budget Rows */
+.budget-row {
+    background: rgba(217, 217, 217, 0.08);
+    border: 1px solid rgba(217, 217, 217, 0.12);
+    border-radius: 14px;
+    padding: 14px 20px;
+    transition: all 0.2s;
+}
+
+.budget-row:hover {
+    background: rgba(217, 217, 217, 0.12);
+    border-color: rgba(217, 217, 217, 0.2);
+}
+
+.progress-track {
+    background: rgba(255,255,255,0.06);
+    border-radius: 999px;
+    height: 5px;
+    width: 100%;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.8s cubic-bezier(.4,0,.2,1);
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.budget-row {
+    animation: fadeUp 0.3s ease both;
+}
+
+/* Transaction Row */
+.tx-row {
+    background: rgba(217, 217, 217, 0.08);
+    border-radius: 14px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.tx-row:hover {
+    border-color: rgba(217, 217, 217, 0.2);
+    background: rgba(217, 217, 217, 0.12);
+}
+
+.tx-row:hover .delete-btn {
+    opacity: 1;
+}
+
+.delete-btn {
+    opacity: 0;
+    background: rgba(247, 36, 36, 0.15);
+    border: none;
+    border-radius: 8px;
+    color: #F72424;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+/* Buttons */
+.save-btn {
+    background: linear-gradient(135deg, #7D63CC, #9673FF);
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s;
+    white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.save-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(125, 99, 204, 0.4);
+}
+
+.pm-btn {
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.pm-btn.active {
+    background: linear-gradient(135deg, #7D63CC, #9673FF);
+    color: #fff;
+}
+
+.pm-btn:not(.active) {
+    background: rgba(255,255,255,0.08);
+    color: #AFAED7;
+}
+
+.pm-btn:not(.active):hover {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+}
+
+.filter-btn {
+    background: rgba(217, 217, 217, 0.1);
+    border: 1px solid rgba(217, 217, 217, 0.2);
+    color: #AFAED7;
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.filter-btn:hover {
+    background: rgba(217, 217, 217, 0.15);
+    color: #fff;
+}
+
+.filter-input {
+    background: rgba(217, 217, 217, 0.1);
+    border: 1px solid rgba(217, 217, 217, 0.2);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    width: 200px;
+    font-family: 'DM Sans', sans-serif;
+}
+
+/* Amount Colors */
+.amount-positive {
+    color: #00D472;
+    font-family: 'Space Mono', monospace;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.amount-negative {
+    color: #F72424;
+    font-family: 'Space Mono', monospace;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+/* Activity Page */
+.filter-pill {
+    padding: 9px 32px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(217, 217, 217, 0.2);
+    background: transparent;
+    color: #AFAED7;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.filter-pill:hover {
+    border-color: #9673FF;
+    color: #fff;
+}
+
+.filter-pill.active {
+    background: linear-gradient(135deg, #7D63CC, #9673FF);
+    border-color: transparent;
+    color: #fff;
+}
+
+.generate-btn {
+    background: linear-gradient(135deg, #9673FF, #7D63CC);
+    border: none;
+    color: #fff;
+    padding: 12px 28px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 700;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.01em;
+}
+
+.generate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(150, 115, 255, 0.45);
+}
+
+.search-input {
+    width: 100%;
+    background: rgba(217, 217, 217, 0.1);
+    border: 1.5px solid rgba(217, 217, 217, 0.15);
+    border-radius: 14px;
+    padding: 13px 20px;
+    color: #fff;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    transition: border-color 0.2s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #9673FF;
+}
+
+.search-input::placeholder {
+    color: rgba(217, 217, 217, 0.5);
+}
+
+.amount-pos {
+    color: #00D472;
+    font-family: 'Space Mono', monospace;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.amount-neg {
+    color: #F72424;
+    font-family: 'Space Mono', monospace;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.activity-row {
+    animation: fadeIn 0.25s ease both;
+    background: rgba(217, 217, 217, 0.08);
+    border: 1px solid rgba(217, 217, 217, 0.12);
+    border-radius: 14px;
+    padding: 16px 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.activity-row:hover {
+    background: rgba(217, 217, 217, 0.12);
+    border-color: rgba(217, 217, 217, 0.2);
+    transform: translateX(2px);
+}
+
+/* Form Inputs */
+input, select {
+    background: rgba(255, 241, 241, 0.1);
+    border: 1px solid rgba(217, 217, 217, 0.3);
+    color: #ffffff;
+}
+
+input::placeholder {
+    color: rgba(217, 217, 217, 0.5);
+}
+
+select option {
+    background: #07003A;
+    color: #ffffff;
+}
+
+/* Cards */
+.card {
+    background: rgba(217, 217, 217, 0.08);
+    border: 1px solid rgba(217, 217, 217, 0.15);
+    border-radius: 18px;
+}
+
+/* Income/Expense Colors */
+.income {
+    color: #00D472;
+}
+
+.expense {
+    color: #F72424;
+}
+
+.positive {
+    color: #00FC11;
+}
+
+.negative {
+    color: #FF0808;
+}
+
+/* Budget Progress */
+.budget-over {
+    background: linear-gradient(90deg, #FF0808, #F72424);
+}
+
+.budget-good {
+    background: linear-gradient(90deg, #4CAF81, #7DF094);
+}
+
+/* Special Elements */
+.orange-accent {
+    color: #DE5C5C;
+}
+
+.light-purple {
+    color: #816DBC;
+}
+
+.bright-purple {
+    color: #7D63CC;
+}
+
+/* Profile Section */
+.profile-box {
+    background: rgba(217, 217, 217, 0.08);
+    border: 1px solid rgba(217, 217, 217, 0.15);
+    border-radius: 14px;
+    padding: 16px;
+}
+
+.profile-input {
+    background: rgba(255, 241, 241, 0.1);
+    border: 1px solid rgba(255, 241, 241, 0.3);
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: #ffffff;
+    font-size: 14px;
+    width: 100%;
+}
+
+.profile-input::placeholder {
+    color: rgba(217, 217, 217, 0.5);
+}
+
+/* Savings */
+.savings-goal {
+    background: rgba(129, 109, 188, 0.12);
+    border: 1px solid rgba(129, 109, 188, 0.25);
+    border-radius: 14px;
+    padding: 16px;
+}
+
+.savings-progress {
+    background: linear-gradient(90deg, #4CAF81, #7DF094);
+}
+
+/* Login Page */
+.login-container {
+    background: linear-gradient(135deg, #07003A, #1C0859);
+}
+
+.login-button {
+    background: linear-gradient(135deg, #7D63CC, #9673FF);
+}
+
+.login-input {
+    background: rgba(255, 241, 241, 0.1);
+    border: 1px solid rgba(217, 217, 217, 0.3);
+    border-radius: 10px;
+    padding: 14px 18px;
+    color: #ffffff;
+    font-size: 16px;
+    width: 100%;
+}
+
+.login-input::placeholder {
+    color: rgba(217, 217, 217, 0.5);
+}
+
+/* =============================================
+   MOBILE RESPONSIVE STYLES
+   ============================================= */
+
+/* Main app container - adjust for mobile bottom nav */
+.app-container {
+    display: flex;
+    height: 100vh;
+    background: #0d0d1a;
+    font-family: 'DM Sans', sans-serif;
+    color: #fff;
+    overflow: hidden;
+}
+
+/* Mobile Navigation - Bottom Bar */
+@media (max-width: 768px) {
+    /* Hide desktop sidebar */
+    .sidebar {
+        display: none !important;
+    }
+    
+    /* Add bottom navigation for mobile */
+    .mobile-nav {
+        display: flex !important;
+        padding-bottom: env(safe-area-inset-bottom, 20px);
+        background: rgba(13, 13, 26, 0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Mobile nav item styling */
+    .mobile-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 8px 12px;
+        cursor: pointer;
+        color: #AFAED7;
+        transition: all 0.2s;
+    }
+    
+    .mobile-nav-item.active {
+        color: #ff6b35;
+    }
+    
+    .mobile-nav-item:active {
+        transform: scale(0.95);
+    }
+    
+    /* Main container adjustments */
+    .app-container {
+        padding-bottom: 70px;
+    }
+    
+    /* Safe area for top - including savings */
+    .dashboard-content,
+    .budget-content,
+    .activity-content,
+    .add-transaction-content,
+    .report-content,
+    .savings-content {
+        padding: 20px 16px;
+        padding-top: max(20px, env(safe-area-inset-top));
+    }
+    
+    /* Make stat cards stack vertically */
+    .dashboard-content > div:first-child,
+    .savings-content > div:nth-child(2) {
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+    
+    /* Stack all flex containers on mobile */
+    .dashboard-content,
+    .savings-content {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Stack stat cards vertically on mobile */
+    .stats-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .stat-card {
+        padding: 16px;
+    }
+    
+    /* Adjust weekly chart for mobile */
+    .weekly-chart {
+        gap: 8px;
+    }
+    
+    .day-bar-bg {
+        height: 48px;
+    }
+    
+    /* Make budget rows full width */
+    .budget-row {
+        padding: 12px 16px;
+    }
+    
+    /* Adjust transaction rows */
+    .tx-row {
+        padding: 14px 16px;
+    }
+    
+    /* Filter pills scroll horizontally */
+    .filter-pills {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 8px;
+    }
+    
+    .filter-pill {
+        flex-shrink: 0;
+        padding: 8px 20px;
+    }
+    
+    /* Form inputs full width */
+    .filter-input,
+    .profile-input,
+    .login-input {
+        width: 100%;
+    }
+    
+    /* Header adjustments */
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    
+    /* Buttons full width on mobile */
+    .save-btn,
+    .generate-btn {
+        width: 100%;
+    }
+    
+    /* Activity rows */
+    .activity-row {
+        padding: 14px 16px;
+    }
+    
+    /* Profile section */
+    .profile-section {
+        padding: 16px;
+    }
+    
+    /* Make grid layouts single column */
+    .budget-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .transactions-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+    .dashboard-content,
+    .budget-content,
+    .activity-content,
+    .add-transaction-content,
+    .report-content,
+    .savings-content {
+        padding: 16px 12px !important;
+    }
+    
+    .page-title {
+        font-size: 24px !important;
+    }
+    
+    .stat-value {
+        font-size: 20px !important;
+    }
+    
+    /* Make header text smaller on mobile */
+    .dashboard-content h1,
+    .savings-content h1 {
+        font-size: 22px !important;
+    }
+    
+    /* Stack flex items on mobile */
+    .dashboard-content > div,
+    .savings-content > div {
+        flex-direction: column !important;
+    }
+    
+    /* Smaller text for tight spaces */
+    body {
+        font-size: 14px;
+    }
+}
+
+/* Touch-friendly improvements for mobile */
+@media (hover: none) and (pointer: coarse) {
+    /* Larger touch targets */
+    .nav-item {
+        padding: 14px 20px;
+    }
+    
+    .save-btn,
+    .pm-btn,
+    .filter-btn {
+        min-height: 44px;
+        padding: 12px 20px;
+    }
+    
+    /* Disable hover effects on touch devices */
+    .tx-row:hover .delete-btn {
+        opacity: 1;
+    }
+    
+    /* Always show delete button on touch */
+    .delete-btn {
+        opacity: 1;
+    }
+    
+    /* Make inputs more touch-friendly */
+    input, select {
+        font-size: 16px; /* Prevent iOS zoom on focus */
+        padding: 12px 14px;
+    }
+    
+    .filter-input,
+    .search-input {
+        padding: 12px 16px;
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (max-height: 500px) and (orientation: landscape) {
+    .mobile-nav {
+        padding: 4px 8px;
+    }
+    
+    .mobile-nav > div {
+        padding: 4px 8px;
+    }
+}
+
+/* =============================================
+   SAVINGS PAGE STYLES
+   ============================================= */
+
+.savings-content {
+    flex: 1;
+    overflow: auto;
+    padding: 32px 40px;
+}
+
+/* Mobile responsive for savings */
+@media (max-width: 768px) {
+    .savings-content {
+        padding: 20px 16px;
+    }
+    
+    .savings-content .stat-card {
+        padding: 16px;
+    }
+    
+    .savings-content > div {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .savings-content {
+        padding: 16px 12px;
+    }
+}

@@ -1,0 +1,8 @@
+.git
+.vscode
+**/node_modules
+**/.env
+**/.env.local
+**/.env.production
+Budget-Flow-feature-ohene/Budget-Flow-feature-ohene/backups
+budget-flow-flowise/node_modules

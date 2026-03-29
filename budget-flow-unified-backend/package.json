@@ -1,0 +1,23 @@
+{
+  "name": "budget-flow-feature-backend",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "bun --watch src/server.js",
+    "start": "bun src/server.js",
+    "test:assistant": "node src/services/assistant.service.test.js",
+    "db:init": "bun src/scripts/init-db.js",
+    "db:verify": "bun src/scripts/verify-db.js"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.13.1"
+  }
+}

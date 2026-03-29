@@ -1,0 +1,9 @@
+{
+  "name": "budget-flow-flowise",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "start": "bunx flowise start",
+    "dev": "bunx flowise start"
+  }
+}

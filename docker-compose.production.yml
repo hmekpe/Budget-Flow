@@ -1,0 +1,127 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-budget_flow}
+      POSTGRES_USER: ${POSTGRES_USER:-budgetflow}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      FLOWISE_POSTGRES_DB: ${FLOWISE_POSTGRES_DB:-flowise}
+      FLOWISE_POSTGRES_USER: ${FLOWISE_POSTGRES_USER:-flowise}
+      FLOWISE_POSTGRES_PASSWORD: ${FLOWISE_POSTGRES_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./deployment/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-budgetflow} -d ${POSTGRES_DB:-budget_flow}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  auth-backend:
+    build:
+      context: ./Budget-Flow/backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PORT: 5000
+      DATABASE_URL: postgres://${POSTGRES_USER:-budgetflow}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-budget_flow}
+      DATABASE_SSL: "false"
+      DATABASE_SSL_REJECT_UNAUTHORIZED: "false"
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      CLIENT_URL: ${PUBLIC_WEB_URL:-http://localhost:8080}
+      ALLOWED_ORIGINS: ${PUBLIC_WEB_URL:-http://localhost:8080}
+      TRUST_PROXY: "true"
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      MAIL_FROM: ${MAIL_FROM:-Budget Flow <no-reply@example.com>}
+
+  feature-backend:
+    build:
+      context: ./budget-flow-unified-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PORT: 5002
+      DATABASE_URL: postgres://${POSTGRES_USER:-budgetflow}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-budget_flow}
+      DATABASE_SSL: "false"
+      DATABASE_SSL_REJECT_UNAUTHORIZED: "false"
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      CLIENT_URL: ${PUBLIC_WEB_URL:-http://localhost:8080}
+      FEATURE_FRONTEND_URL: ${PUBLIC_WEB_URL:-http://localhost:8080}
+      ALLOWED_ORIGINS: ${PUBLIC_WEB_URL:-http://localhost:8080}
+      TRUST_PROXY: "true"
+      ASSISTANT_MODE: ${ASSISTANT_MODE:-hybrid}
+      GROQ_ENABLED: ${GROQ_ENABLED:-false}
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      GROQ_MODEL: ${GROQ_MODEL:-openai/gpt-oss-20b}
+      GROQ_BASE_URL: ${GROQ_BASE_URL:-https://api.groq.com/openai/v1}
+      GROQ_TIMEOUT_MS: ${GROQ_TIMEOUT_MS:-10000}
+      FLOWISE_ENABLED: ${FLOWISE_ENABLED:-false}
+      FLOWISE_BASE_URL: ${FLOWISE_BASE_URL:-http://flowise:3000}
+      FLOWISE_CHATFLOW_ID: ${FLOWISE_CHATFLOW_ID}
+      FLOWISE_API_KEY: ${FLOWISE_API_KEY}
+      FLOWISE_TIMEOUT_MS: ${FLOWISE_TIMEOUT_MS:-10000}
+      AI_TOOL_BASE_URL: ${AI_TOOL_BASE_URL:-http://feature-backend:5002}
+      AI_CHAT_RATE_LIMIT_WINDOW_MS: ${AI_CHAT_RATE_LIMIT_WINDOW_MS:-60000}
+      AI_CHAT_RATE_LIMIT_MAX: ${AI_CHAT_RATE_LIMIT_MAX:-15}
+      AI_CACHE_TTL_MS: ${AI_CACHE_TTL_MS:-30000}
+
+  flowise:
+    profiles:
+      - flowise
+    image: ${FLOWISE_IMAGE:-flowiseai/flowise:3.1.1}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PORT: 3000
+      APP_URL: ${FLOWISE_APP_URL:-http://127.0.0.1:3000}
+      DATABASE_TYPE: postgres
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: ${FLOWISE_POSTGRES_DB:-flowise}
+      DATABASE_USER: ${FLOWISE_POSTGRES_USER:-flowise}
+      DATABASE_PASSWORD: ${FLOWISE_POSTGRES_PASSWORD}
+      DATABASE_SSL: ${FLOWISE_DATABASE_SSL:-false}
+      STORAGE_TYPE: local
+      APIKEY_PATH: /root/.flowise
+      SECRETKEY_PATH: /root/.flowise
+      LOG_PATH: /root/.flowise/logs
+      BLOB_STORAGE_PATH: /root/.flowise/storage
+      FLOWISE_SECRETKEY_OVERWRITE: ${FLOWISE_SECRETKEY_OVERWRITE}
+      FLOWISE_USERNAME: ${FLOWISE_USERNAME}
+      FLOWISE_PASSWORD: ${FLOWISE_PASSWORD}
+      JWT_AUTH_TOKEN_SECRET: ${FLOWISE_JWT_AUTH_TOKEN_SECRET}
+      JWT_REFRESH_TOKEN_SECRET: ${FLOWISE_JWT_REFRESH_TOKEN_SECRET}
+      EXPRESS_SESSION_SECRET: ${FLOWISE_EXPRESS_SESSION_SECRET}
+      TOKEN_HASH_SECRET: ${FLOWISE_TOKEN_HASH_SECRET}
+    volumes:
+      - flowise-data:/root/.flowise
+    ports:
+      - 127.0.0.1:${FLOWISE_ADMIN_PORT:-3000}:3000
+
+  frontend:
+    build:
+      context: .
+      dockerfile: deployment/frontend/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - auth-backend
+      - feature-backend
+    ports:
+      - ${PUBLIC_PORT:-8080}:80
+
+volumes:
+  postgres-data:
+  flowise-data:

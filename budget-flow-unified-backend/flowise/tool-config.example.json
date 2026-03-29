@@ -1,0 +1,40 @@
+{
+  "tools": [
+    {
+      "name": "getMonthlySummary",
+      "method": "GET",
+      "url": "{{$vars.budgetFlowApiBaseUrl}}/api/ai/summary?month={{$vars.budgetFlowMonth}}",
+      "headers": {
+        "Authorization": "Bearer {{$vars.budgetFlowJwt}}"
+      },
+      "errorHandling": "Return a short tool error message instead of failing silently."
+    },
+    {
+      "name": "getTopCategories",
+      "method": "GET",
+      "url": "{{$vars.budgetFlowApiBaseUrl}}/api/ai/categories?month={{$vars.budgetFlowMonth}}",
+      "headers": {
+        "Authorization": "Bearer {{$vars.budgetFlowJwt}}"
+      },
+      "errorHandling": "Return a short tool error message instead of failing silently."
+    },
+    {
+      "name": "getRecentTransactions",
+      "method": "GET",
+      "url": "{{$vars.budgetFlowApiBaseUrl}}/api/ai/transactions?limit=10",
+      "headers": {
+        "Authorization": "Bearer {{$vars.budgetFlowJwt}}"
+      },
+      "errorHandling": "Return a short tool error message instead of failing silently."
+    },
+    {
+      "name": "getInsights",
+      "method": "GET",
+      "url": "{{$vars.budgetFlowApiBaseUrl}}/api/ai/insights?month={{$vars.budgetFlowMonth}}",
+      "headers": {
+        "Authorization": "Bearer {{$vars.budgetFlowJwt}}"
+      },
+      "errorHandling": "Return a short tool error message instead of failing silently."
+    }
+  ]
+}

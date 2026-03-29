@@ -1,0 +1,9 @@
+.env
+.env.production
+budget-flow-unified-backend/.env
+Budget-Flow/backend/.env
+.vscode/
+**/node_modules/
+Budget-Flow-feature-ohene/Budget-Flow-feature-ohene/backups/
+*.log
+**/.git.local-backup/

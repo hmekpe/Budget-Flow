@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1C0859" />
+  <title>Budget Flow Offline</title>
+  <style>
+    :root {
+      --bg: #0b0b18;
+      --panel: rgba(22, 17, 46, 0.92);
+      --border: rgba(175, 174, 215, 0.18);
+      --text: #f7f7fb;
+      --muted: rgba(247, 247, 251, 0.72);
+      --accent: #816dbc;
+      --accent-strong: #6b46c1;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
+      font-family: "DM Sans", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(129, 109, 188, 0.22), transparent 32%),
+        linear-gradient(160deg, #080712 0%, #0b0b18 48%, #120b24 100%);
+    }
+
+    .panel {
+      width: min(100%, 520px);
+      padding: 28px 24px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: var(--panel);
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.35);
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
+      line-height: 1.08;
+    }
+
+    p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    a,
+    button {
+      min-height: 46px;
+      padding: 12px 18px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #fff;
+    }
+
+    .secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+  </style>
+</head>
+<body>
+  <main class="panel">
+    <h1>Budget Flow is offline right now.</h1>
+    <p>Your saved app shell is available, but live features like sign in, syncing, reports, reminders, and exchange-rate updates need a connection.</p>
+    <p>Reconnect to continue working with your latest account data.</p>
+    <div class="actions">
+      <button class="primary" type="button" onclick="window.location.reload()">Try again</button>
+      <a class="secondary" href="/pages/auth.html">Go to login</a>
+      <a class="secondary" href="/app/index.html">Open app</a>
+    </div>
+  </main>
+</body>
+</html>

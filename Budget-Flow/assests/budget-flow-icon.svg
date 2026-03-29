@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="64" y1="48" x2="448" y2="464" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2b127f"/>
+      <stop offset="1" stop-color="#14064b"/>
+    </linearGradient>
+    <linearGradient id="coin" x1="180" y1="178" x2="344" y2="356" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffd267"/>
+      <stop offset="1" stop-color="#f09c2e"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect x="96" y="88" width="320" height="336" rx="88" fill="rgba(255,255,255,0.04)"/>
+  <path d="M160 176l96 48 96-48-96-48-96 48zm0 96l96 48 96-48m-192 0l96 48 96-48" fill="none" stroke="#AFAED7" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"/>
+  <circle cx="336" cy="336" r="72" fill="url(#coin)"/>
+  <path d="M336 296v82m-20-18c0 10 10 18 20 18s20-8 20-18-10-18-20-18-20-8-20-18 10-18 20-18 20 8 20 18" fill="none" stroke="#7a4314" stroke-linecap="round" stroke-linejoin="round" stroke-width="14"/>
+  <path d="M336 244l12 20h24l-18 14 6 22-24-12-24 12 6-22-18-14h24z" fill="#ffd267"/>
+</svg>

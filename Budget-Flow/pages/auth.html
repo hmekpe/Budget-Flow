@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1C0859" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Budget Flow" />
+  <meta name="application-name" content="Budget Flow" />
+  <title>Budget Flow Authentication</title>
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <link rel="icon" href="../assests/budget-flow-icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="../css/auth.css" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+  <div class="app">
+    <section class="auth-side">
+      <div class="auth-shell">
+
+        <div class="screen active" id="login-screen">
+          <p class="eyebrow">LOGIN</p>
+          <h1 class="brand">BUDGET FLOW</h1>
+          <h2 class="title">Welcome back!</h2>
+          <p class="subtitle">Enter your Credentials to access your account</p>
+
+          <div id="login-message" class="message"></div>
+
+          <form id="login-form">
+            <div class="form-group">
+              <label for="login-email">Email address</label>
+              <input type="email" id="login-email" placeholder="Enter your email" required />
+            </div>
+
+            <div class="form-group">
+              <div class="label-row">
+                <label for="login-password" class="no-margin">Password</label>
+                <button type="button" class="text-link" data-screen="forgot-screen">Forgot password</button>
+              </div>
+
+              <div class="password-wrap">
+                <input type="password" id="login-password" placeholder="Enter your password" required />
+                <button type="button" class="toggle-btn" data-target="login-password">Show</button>
+              </div>
+            </div>
+
+            <label class="check-row">
+              <input type="checkbox" id="remember-me" />
+              Remember for 30 days
+            </label>
+
+            <button type="submit" class="primary-btn">Login</button>
+          </form>
+
+          <div class="divider"><span>or</span></div>
+
+          <div class="social-row">
+            <div class="google-btn-host" id="google-login-btn" aria-label="Continue with Google">
+              <div class="google-btn-placeholder">Continue with Google</div>
+            </div>
+          </div>
+
+          <p class="bottom-text">
+            Don't have an account?
+            <button type="button" class="text-link" data-screen="signup-screen">Sign Up</button>
+          </p>
+        </div>
+
+        <div class="screen" id="signup-screen">
+          <p class="eyebrow">SIGN UP</p>
+          <h2 class="title signup-title">Get Started with Budget Flow Now</h2>
+
+          <div id="signup-message" class="message"></div>
+
+          <form id="signup-form">
+            <div class="form-group">
+              <label for="signup-name">Name</label>
+              <input type="text" id="signup-name" placeholder="Enter your name" required />
+            </div>
+
+            <div class="form-group">
+              <label for="signup-email">Email address</label>
+              <input type="email" id="signup-email" placeholder="Enter your email" required />
+            </div>
+
+            <div class="form-group">
+              <label for="signup-password">Password</label>
+              <div class="password-wrap">
+                <input type="password" id="signup-password" placeholder="Password" required />
+                <button type="button" class="toggle-btn" data-target="signup-password">Show</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-confirm-password">Confirm Password</label>
+              <div class="password-wrap">
+                <input type="password" id="signup-confirm-password" placeholder="Password" required />
+                <button type="button" class="toggle-btn" data-target="signup-confirm-password">Show</button>
+              </div>
+            </div>
+
+            <label class="check-row">
+              <input type="checkbox" id="terms-checkbox" required />
+              agree to the terms &amp; policy
+            </label>
+
+            <button type="submit" class="primary-btn">Signup</button>
+          </form>
+
+          <div class="divider"><span>or</span></div>
+
+          <div class="social-row">
+            <div class="google-btn-host" id="google-signup-btn" aria-label="Sign in with Google">
+              <div class="google-btn-placeholder">Sign in with Google</div>
+            </div>
+          </div>
+
+          <p class="bottom-text">
+            Have an account?
+            <button type="button" class="text-link" data-screen="login-screen">Sign In</button>
+          </p>
+        </div>
+
+        <div class="screen" id="forgot-screen">
+          <p class="eyebrow">PASSWORD RESET</p>
+          <h2 class="title">Forgot Password?</h2>
+          <p class="subtitle">Enter your email address and we will send a reset link to your account.</p>
+
+          <div id="forgot-message" class="message"></div>
+
+          <form id="forgot-form">
+            <div class="form-group">
+              <label for="forgot-email">Email address</label>
+              <input type="email" id="forgot-email" placeholder="Enter your email" required />
+            </div>
+
+            <button type="submit" class="primary-btn">Send Reset Link</button>
+          </form>
+
+          <p class="bottom-text">
+            <button type="button" class="text-link" data-screen="login-screen">Back to Login</button>
+          </p>
+        </div>
+
+        <div class="screen" id="success-screen">
+          <p class="eyebrow">PASSWORD RESET</p>
+
+          <div class="success-card">
+            <div class="success-badge">✓</div>
+            <h2 class="title">Check your inbox</h2>
+            <p class="subtitle">A password reset link has been sent successfully. Please check your email.</p>
+            <button type="button" class="primary-btn" data-screen="login-screen">Back to Login</button>
+            <p class="small-note">This flow is fully connected to the backend and will send a real reset link when email is configured.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <aside class="visual-side" aria-hidden="true">
+      <div class="shape"></div>
+    </aside>
+  </div>
+
+  <script src="../js/auth.js"></script>
+  <script src="../js/pwa.js"></script>
+</body>
+</html>
