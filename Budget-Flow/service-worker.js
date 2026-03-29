@@ -1,4 +1,4 @@
-const CACHE_NAME = "budget-flow-shell-v1";
+const CACHE_NAME = "budget-flow-shell-v2";
 const OFFLINE_URL = "/offline.html";
 const APP_SHELL = [
   "/",
@@ -50,6 +50,10 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (url.pathname.startsWith("/api/")) {
+    return;
+  }
+
+  if (url.pathname === "/runtime-config.js") {
     return;
   }
 

@@ -11,7 +11,18 @@ function getRuntimeProtocol() {
   return window.location.protocol === "file:" ? "http:" : window.location.protocol;
 }
 
+function getRuntimeConfigValue(key) {
+  const runtimeConfig = window.BudgetFlowRuntimeConfig || {};
+  return String(runtimeConfig[key] || "").trim().replace(/\/+$/, "");
+}
+
 function resolveAuthApiBaseUrl() {
+  const configuredBaseUrl = getRuntimeConfigValue("authApiBaseUrl");
+
+  if (configuredBaseUrl) {
+    return configuredBaseUrl;
+  }
+
   if (isLocalDevelopment()) {
     return `${getRuntimeProtocol()}//${window.location.hostname || "localhost"}:5000/api/auth`;
   }

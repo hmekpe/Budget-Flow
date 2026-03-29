@@ -85,7 +85,18 @@
     return window.location.protocol === "file:" ? "http:" : window.location.protocol;
   }
 
+  function getRuntimeConfigValue(key) {
+    const runtimeConfig = window.BudgetFlowRuntimeConfig || {};
+    return String(runtimeConfig[key] || "").trim().replace(/\/+$/, "");
+  }
+
   function getFeatureApiBaseUrl() {
+    const configuredBaseUrl = getRuntimeConfigValue("featureApiBaseUrl");
+
+    if (configuredBaseUrl) {
+      return configuredBaseUrl;
+    }
+
     if (isLocalDevelopment()) {
       return `${getRuntimeProtocol()}//${window.location.hostname || "localhost"}:5002/api`;
     }

@@ -1,0 +1,4 @@
+window.BudgetFlowRuntimeConfig = Object.freeze({
+  authApiBaseUrl: "${AUTH_API_BASE_URL}",
+  featureApiBaseUrl: "${FEATURE_API_BASE_URL}"
+});
