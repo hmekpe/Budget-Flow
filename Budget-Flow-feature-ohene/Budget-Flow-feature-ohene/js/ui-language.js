@@ -334,8 +334,8 @@
     });
 
     setText("#modal-set-budget .modal-title", "budget.modalSetTitle");
-    setText("#modal-set-budget .form-group:nth-of-type(1) label", "common.month");
-    setText("#modal-set-budget .form-group:nth-of-type(2) label", "budget.totalAmount", {
+    setText("#sb-month-label", "common.month");
+    setText("#sb-total-label", "budget.totalAmount", {
       currency: getCurrencySymbol()
     });
     setButtonLabel(
@@ -344,19 +344,19 @@
     );
 
     setText("#modal-add-category .modal-title", "budget.modalAddTitle");
-    setText("#modal-add-category .form-group:nth-of-type(1) label", "budget.categoryName");
-    setText("#modal-add-category .form-group:nth-of-type(2) label", "budget.spendingLimit", {
+    setText("#ac-name-label", "budget.categoryName");
+    setText("#ac-limit-label", "budget.spendingLimit", {
       currency: getCurrencySymbol()
     });
-    setText("#modal-add-category .form-group:nth-of-type(3) label", "budget.chooseEmoji");
+    setText("#ac-emoji-label", "budget.chooseEmoji");
     setButtonLabel(
       document.querySelector("#modal-add-category .modal-submit-btn"),
       t("budget.addCategory")
     );
 
     setText("#modal-edit-category .modal-title", "budget.modalEditTitle");
-    setText("#modal-edit-category .form-group:nth-of-type(1) label", "budget.categoryName");
-    setText("#modal-edit-category .form-group:nth-of-type(2) label", "budget.spendingLimit", {
+    setText("#ec-name-label", "budget.categoryName");
+    setText("#ec-limit-label", "budget.spendingLimit", {
       currency: getCurrencySymbol()
     });
     setButtonLabel(
@@ -692,11 +692,11 @@
     });
 
     setText("#modal-add-goal .modal-title", "savings.createGoalTitle");
-    setText("#modal-add-goal .form-group:nth-of-type(1) label", "savings.goalName");
-    setText("#modal-add-goal .form-group:nth-of-type(2) label", "savings.targetAmount", {
+    setText("#sg-name-label", "savings.goalName");
+    setText("#sg-target-label", "savings.targetAmount", {
       currency: getCurrencySymbol()
     });
-    setText("#modal-add-goal .form-group:nth-of-type(3) label", "savings.chooseIcon");
+    setText("#sg-icon-label", "savings.chooseIcon");
     setButtonLabel(
       document.querySelector("#modal-add-goal .modal-submit-btn"),
       t("savings.createGoal")
@@ -721,8 +721,8 @@
     );
 
     setText("#modal-edit-goal .modal-title", "savings.editGoal");
-    setText("#modal-edit-goal .form-group:nth-of-type(1) label", "savings.goalName");
-    setText("#modal-edit-goal .form-group:nth-of-type(2) label", "savings.targetAmount", {
+    setText("#eg-name-label", "savings.goalName");
+    setText("#eg-target-label", "savings.targetAmount", {
       currency: getCurrencySymbol()
     });
     setButtonLabel(

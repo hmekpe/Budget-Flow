@@ -10,7 +10,10 @@
     time: "budgetFlowReminderTime",
     lastSentDay: "budgetFlowReminderLastSentDay"
   };
+  const PUSH_MESSAGE_STORAGE_KEY = "budgetFlowPushMessageDraft";
+  const DEFAULT_PUSH_MESSAGE = "Budget Flow is ready. Tap to check your dashboard.";
   let reminderTimeoutId = null;
+  let pendingTransactionDeleteId = null;
 
   function stripHash(url) {
     return String(url || "").split("#")[0];
@@ -94,6 +97,10 @@
   function rememberWorkflowUrls() {
     localStorage.setItem("budgetFlowAppUrl", getCanonicalAppUrl());
     localStorage.setItem("budgetFlowAuthUrl", resolveAuthPageUrl());
+  }
+
+  function setAppLoading(isLoading) {
+    document.body.classList.toggle("app-loading", Boolean(isLoading));
   }
 
   function redirectToCanonicalAppIfNeeded() {
@@ -290,7 +297,266 @@
     localStorage.setItem(REMINDER_STORAGE_KEYS.time, String(reminderTime || "18:00").slice(0, 5));
   }
 
-  function sendBudgetReminder() {
+  function getPushConfig() {
+    return state.bootstrap?.meta?.push || {};
+  }
+
+  function isPushSupported() {
+    return (
+      window.location.protocol !== "file:" &&
+      "serviceWorker" in navigator &&
+      "PushManager" in window
+    );
+  }
+
+  function urlBase64ToUint8Array(value) {
+    const normalized = String(value || "")
+      .replace(/-/g, "+")
+      .replace(/_/g, "/");
+    const padding = "=".repeat((4 - (normalized.length % 4)) % 4);
+    const base64 = normalized + padding;
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let index = 0; index < rawData.length; index += 1) {
+      outputArray[index] = rawData.charCodeAt(index);
+    }
+
+    return outputArray;
+  }
+
+  function getNotificationAssetUrl() {
+    if (window.location.protocol === "file:") {
+      return "../assests/budget-flow-icon.svg";
+    }
+
+    return `${getWorkflowOrigin()}/assests/budget-flow-icon.svg`;
+  }
+
+  async function showAppNotification({ title, body, tag }) {
+    const notificationOptions = {
+      body,
+      tag,
+      icon: getNotificationAssetUrl(),
+      badge: getNotificationAssetUrl(),
+      data: {
+        url: `${getCanonicalAppUrl()}#dashboard`
+      }
+    };
+
+    if ("serviceWorker" in navigator) {
+      try {
+        const registration = await navigator.serviceWorker.ready;
+        if (registration?.showNotification) {
+          await registration.showNotification(title, notificationOptions);
+          return true;
+        }
+      } catch (error) {
+        // Fall back to a regular Notification below.
+      }
+    }
+
+    if ("Notification" in window && Notification.permission === "granted") {
+      new Notification(title, notificationOptions);
+      return true;
+    }
+
+    return false;
+  }
+
+  async function getPushRegistration() {
+    if (!isPushSupported()) {
+      return null;
+    }
+
+    try {
+      return await navigator.serviceWorker.ready;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function getPushMessageDraft() {
+    const field = document.getElementById("push-message");
+    const nextValue = String(
+      field?.value || localStorage.getItem(PUSH_MESSAGE_STORAGE_KEY) || DEFAULT_PUSH_MESSAGE
+    ).trim();
+
+    return nextValue || DEFAULT_PUSH_MESSAGE;
+  }
+
+  function persistPushMessageDraft(value) {
+    localStorage.setItem(PUSH_MESSAGE_STORAGE_KEY, String(value || "").trim() || DEFAULT_PUSH_MESSAGE);
+  }
+
+  function setPushUi(isEnabled) {
+    const checkbox = document.getElementById("push-remind");
+    if (checkbox) {
+      checkbox.checked = Boolean(isEnabled);
+    }
+  }
+
+  function renderPushAvailability(options = {}) {
+    const note = document.getElementById("push-note");
+    const pushEnabled = document.getElementById("push-remind")?.checked;
+    const pushConfig = getPushConfig();
+
+    if (!note) {
+      return;
+    }
+
+    if (options.error) {
+      note.textContent = options.error;
+      return;
+    }
+
+    if (!pushConfig.enabled || !pushConfig.publicKey) {
+      note.textContent = "Push notifications are not configured on the server yet.";
+      return;
+    }
+
+    if (!isPushSupported()) {
+      note.textContent = "This browser does not support push notifications for Budget Flow here.";
+      return;
+    }
+
+    if ("Notification" in window && Notification.permission === "denied") {
+      note.textContent = "Notifications are blocked in this browser. Enable them in browser settings.";
+      return;
+    }
+
+    if (options.ready) {
+      note.textContent = "Push is ready on this device. Use Send Notification to open the app from the alert.";
+      return;
+    }
+
+    if (pushEnabled) {
+      note.textContent = "Save your settings to connect this device for visit reminders.";
+      return;
+    }
+
+    note.textContent = "Enable push notifications to send a visit-the-app alert to this device.";
+  }
+
+  async function ensurePushSubscription(options = {}) {
+    const pushConfig = getPushConfig();
+    const shouldPrompt = options.prompt !== false;
+
+    if (!pushConfig.enabled || !pushConfig.publicKey) {
+      throw new Error("Push notifications are not configured on the server yet.");
+    }
+
+    if (!isPushSupported()) {
+      throw new Error("Push notifications are not supported on this device/browser.");
+    }
+
+    let permission = Notification.permission;
+
+    if (permission !== "granted") {
+      if (!shouldPrompt) {
+        throw new Error("Allow notifications on this device to finish connecting push alerts.");
+      }
+
+      permission = await Notification.requestPermission();
+    }
+
+    if (permission !== "granted") {
+      throw new Error("Notifications are blocked. Allow them in your browser settings and try again.");
+    }
+
+    const registration = await getPushRegistration();
+    if (!registration) {
+      throw new Error("The app service worker is not ready yet. Refresh and try again.");
+    }
+
+    let subscription = await registration.pushManager.getSubscription();
+
+    if (!subscription) {
+      subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(pushConfig.publicKey)
+      });
+    }
+
+    await apiFetch("/push/subscriptions", {
+      method: "POST",
+      body: {
+        subscription: subscription.toJSON()
+      }
+    });
+
+    return subscription;
+  }
+
+  async function removePushSubscription() {
+    const registration = await getPushRegistration();
+    const subscription = registration ? await registration.pushManager.getSubscription() : null;
+    const endpoint = subscription?.endpoint;
+
+    if (endpoint) {
+      try {
+        await apiFetch("/push/subscriptions", {
+          method: "DELETE",
+          body: { endpoint }
+        });
+      } catch (error) {
+        // Ignore subscription cleanup failures and continue unsubscribing locally.
+      }
+    }
+
+    if (subscription) {
+      await subscription.unsubscribe().catch(() => {});
+    }
+  }
+
+  async function syncExistingPushSubscription(notifications = {}) {
+    const pushEnabled = Boolean(notifications.pushNotificationsEnabled);
+    setPushUi(pushEnabled);
+    renderPushAvailability();
+
+    if (!pushEnabled || !isPushSupported()) {
+      return;
+    }
+
+    const pushConfig = getPushConfig();
+    if (!pushConfig.enabled || !pushConfig.publicKey) {
+      return;
+    }
+
+    const registration = await getPushRegistration();
+    if (!registration) {
+      return;
+    }
+
+    try {
+      let subscription = await registration.pushManager.getSubscription();
+
+      if (!subscription && Notification.permission === "granted") {
+        subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(pushConfig.publicKey)
+        });
+      }
+
+      if (!subscription) {
+        renderPushAvailability();
+        return;
+      }
+
+      await apiFetch("/push/subscriptions", {
+        method: "POST",
+        body: {
+          subscription: subscription.toJSON()
+        }
+      });
+
+      renderPushAvailability({ ready: true });
+    } catch (error) {
+      renderPushAvailability({ error: error.message });
+    }
+  }
+
+  async function sendBudgetReminder() {
     const todayKey = getLocalDayKey();
 
     if (localStorage.getItem(REMINDER_STORAGE_KEYS.lastSentDay) === todayKey) {
@@ -310,7 +576,8 @@
 
     if (browserNotificationsAllowed) {
       try {
-        new Notification(title, {
+        await showAppNotification({
+          title,
           body,
           tag: "budget-flow-daily-reminder"
         });
@@ -1922,6 +2189,10 @@
     const preferences = settings.preferences || {};
     const notifications = settings.notifications || {};
     const reminderTime = (notifications.reminderTime || "18:00").slice(0, 5);
+    const pushMessageDraft =
+      localStorage.getItem(PUSH_MESSAGE_STORAGE_KEY) ||
+      document.getElementById("push-message")?.value ||
+      DEFAULT_PUSH_MESSAGE;
     const normalizedLanguage =
       window.BudgetFlowI18n?.normalizeLanguage?.(preferences.language || localStorage.getItem("budgetFlowLanguage") || "en") ||
       "en";
@@ -1932,6 +2203,9 @@
       profile.currency || preferences.currency || "GHS";
     document.getElementById("app-lang").value = normalizedLanguage;
     document.getElementById("remind-time").value = reminderTime;
+    if (document.getElementById("push-message")) {
+      document.getElementById("push-message").value = pushMessageDraft;
+    }
     localStorage.setItem(
       "budgetFlowCurrency",
       profile.currency || preferences.currency || localStorage.getItem("budgetFlowCurrency") || "GHS"
@@ -1964,7 +2238,10 @@
 
     applyThemeLocally(preferences.theme || "dark", { silent: true });
     persistReminderPreferences(Boolean(notifications.budgetReminderEnabled), reminderTime);
+    persistPushMessageDraft(pushMessageDraft);
     setReminderUi(Boolean(notifications.budgetReminderEnabled), { silent: true });
+    setPushUi(Boolean(notifications.pushNotificationsEnabled));
+    renderPushAvailability();
     scheduleBudgetReminder();
 
     localStorage.setItem(
@@ -2039,6 +2316,9 @@
     renderAssistantChips(
       bootstrap.meta?.assistant?.suggestions || bootstrap.meta?.assistantSuggestions || []
     );
+    syncExistingPushSubscription(bootstrap.settings?.notifications).catch((error) => {
+      renderPushAvailability({ error: error.message });
+    });
   }
 
   async function saveProfile(payload, successMessage) {
@@ -2062,13 +2342,56 @@
     await loadAppData();
   }
 
-  window.deleteTransaction = async function (id) {
+  window.deleteTransaction = function (id) {
+    pendingTransactionDeleteId = id;
+    const transaction = state.transactions.find((item) => item.id === id);
+    const message = document.getElementById("confirm-transaction-msg");
+
+    if (message) {
+      if (transaction) {
+        message.innerHTML =
+          `You're about to delete <strong>${escapeHtml(transaction.name)}</strong>` +
+          ` from <strong>${escapeHtml(transaction.displayDate)}</strong>` +
+          ` for <strong>${escapeHtml(formatSignedAmount(transaction.signedAmount))}</strong>.` +
+          "<br>This can't be undone.";
+      } else {
+        message.textContent = "You're about to delete this transaction. This can't be undone.";
+      }
+    }
+
+    if (typeof openModal === "function") {
+      openModal("confirm-transaction");
+      return;
+    }
+
+    if (window.confirm("Delete this transaction? This can't be undone.")) {
+      window.confirmDeleteTransaction();
+    }
+  };
+
+  window.cancelDeleteTransaction = function () {
+    pendingTransactionDeleteId = null;
+    if (typeof closeModal === "function") {
+      closeModal("modal-confirm-transaction");
+    }
+  };
+
+  window.confirmDeleteTransaction = async function () {
+    if (pendingTransactionDeleteId == null) {
+      return;
+    }
+
     try {
-      await apiFetch(`/transactions/${id}`, { method: "DELETE" });
+      await apiFetch(`/transactions/${pendingTransactionDeleteId}`, { method: "DELETE" });
+      if (typeof closeModal === "function") {
+        closeModal("modal-confirm-transaction");
+      }
       showToast("Transaction deleted.");
       await loadAppData();
     } catch (error) {
       showToast(error.message);
+    } finally {
+      pendingTransactionDeleteId = null;
     }
   };
 
@@ -2473,6 +2796,7 @@
 
   window.saveNotif = async function () {
     const isEnabled = document.getElementById("budg-remind").checked;
+    const pushEnabled = document.getElementById("push-remind")?.checked;
     const reminderTime = document.getElementById("remind-time").value || "18:00";
     const saveMessagePromise = getReminderSaveMessage(isEnabled);
 
@@ -2481,14 +2805,69 @@
         method: "PUT",
         body: {
           budgetReminderEnabled: isEnabled,
-          reminderTime
+          reminderTime,
+          pushNotificationsEnabled: Boolean(pushEnabled)
         }
       });
 
+      let pushMessage = "";
+
+      if (pushEnabled) {
+        try {
+          await ensurePushSubscription({ prompt: true });
+          renderPushAvailability({ ready: true });
+          pushMessage = " Push alerts are ready on this device.";
+        } catch (error) {
+          document.getElementById("push-remind").checked = false;
+          renderPushAvailability({ error: error.message });
+          await apiFetch("/settings/notifications", {
+            method: "PUT",
+            body: {
+              pushNotificationsEnabled: false
+            }
+          }).catch(() => {});
+          pushMessage = ` ${error.message}`;
+        }
+      } else {
+        await removePushSubscription();
+        renderPushAvailability();
+      }
+
       persistReminderPreferences(isEnabled, reminderTime);
+      persistPushMessageDraft(getPushMessageDraft());
       scheduleBudgetReminder();
-      showToast(await saveMessagePromise);
+      showToast(`${await saveMessagePromise}${pushMessage}`);
       await loadAppData();
+    } catch (error) {
+      showToast(error.message);
+    }
+  };
+
+  window.sendTestNotification = async function () {
+    const message = getPushMessageDraft();
+
+    persistPushMessageDraft(message);
+
+    try {
+      const response = await apiFetch("/push/test", {
+        method: "POST",
+        body: {
+          title: "Budget Flow reminder",
+          message
+        }
+      });
+
+      const delivered = Number(response.delivered || 0);
+      if (delivered > 0) {
+        showToast(
+          delivered === 1
+            ? "Notification sent to this device."
+            : `Notification sent to ${delivered} devices.`
+        );
+        return;
+      }
+
+      showToast("No connected devices yet. Turn on push notifications on this device first.");
     } catch (error) {
       showToast(error.message);
     }
@@ -2655,6 +3034,25 @@
     window.BudgetFlowUiLanguage?.applyCurrency(event.target.value || "GHS");
   });
 
+  document.getElementById("push-message")?.addEventListener("input", function (event) {
+    persistPushMessageDraft(event.target.value);
+  });
+
+  document.addEventListener(
+    "wheel",
+    function (event) {
+      const target = event.target;
+      if (
+        target instanceof HTMLInputElement &&
+        target.type === "number" &&
+        document.activeElement === target
+      ) {
+        event.preventDefault();
+      }
+    },
+    { passive: false }
+  );
+
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") {
       maybeSendDueReminder();
@@ -2681,8 +3079,13 @@
   }
 
   persistToken(token);
+  setAppLoading(true);
 
-  loadAppData().catch((error) => {
-    showToast(error.message || "Could not load app data.");
-  });
+  loadAppData()
+    .catch((error) => {
+      showToast(error.message || "Could not load app data.");
+    })
+    .finally(() => {
+      setAppLoading(false);
+    });
 })();

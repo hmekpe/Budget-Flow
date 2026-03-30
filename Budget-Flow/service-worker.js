@@ -1,4 +1,4 @@
-const CACHE_NAME = "budget-flow-shell-v2";
+const CACHE_NAME = "budget-flow-shell-v3";
 const OFFLINE_URL = "/offline.html";
 const APP_SHELL = [
   "/",
@@ -85,6 +85,58 @@ self.addEventListener("fetch", (event) => {
         .catch(() => cachedResponse);
 
       return cachedResponse || networkResponse;
+    })
+  );
+});
+
+self.addEventListener("push", (event) => {
+  let payload = {};
+
+  if (event.data) {
+    try {
+      payload = event.data.json();
+    } catch (error) {
+      payload = { body: event.data.text() };
+    }
+  }
+
+  const title = payload.title || "Budget Flow";
+  const options = {
+    body: payload.body || "Tap to open Budget Flow.",
+    icon: payload.icon || "/assests/budget-flow-icon.svg",
+    badge: payload.badge || "/assests/budget-flow-icon.svg",
+    tag: payload.tag || "budget-flow-notification",
+    data: {
+      url: payload.url || "/app/index.html#dashboard"
+    }
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+
+  const targetUrl = new URL(
+    event.notification.data?.url || "/app/index.html#dashboard",
+    self.location.origin
+  ).href;
+
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clients) => {
+      const matchingClient = clients.find((client) => client.url.startsWith(self.location.origin));
+
+      if (matchingClient) {
+        return matchingClient.focus().then(() => {
+          if ("navigate" in matchingClient) {
+            return matchingClient.navigate(targetUrl);
+          }
+
+          return matchingClient;
+        });
+      }
+
+      return self.clients.openWindow(targetUrl);
     })
   );
 });

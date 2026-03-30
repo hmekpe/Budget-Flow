@@ -120,7 +120,11 @@ body.light-mode .prog-bar { background: var(--border); }
 body.light-mode .summary-wrap { background: linear-gradient(135deg, #e8e4f0, #d8d5e8); border-color: var(--border); }
 body.light-mode .summary-head-left .title { color: var(--text); }
 body.light-mode .summary-head-left .sub { color: var(--muted); }
-body.light-mode .see-all-s { color: var(--purple-light); }
+body.light-mode .see-all-s {
+  color: var(--purple-light);
+  border-color: rgba(107,70,193,.18);
+  background: rgba(107,70,193,.08);
+}
 body.light-mode .bar-amt { color: var(--muted); }
 body.light-mode .bar-day { color: var(--muted); }
 body.light-mode .bar-inner { background: rgba(107,70,193,.4); }
@@ -154,7 +158,11 @@ body.light-mode .search-bar::placeholder { color: var(--muted); }
 body.light-mode .tab { border-color: var(--border); color: var(--muted); background: transparent; }
 body.light-mode .tab:hover:not(.active) { border-color: var(--purple-light); color: var(--text); }
 body.light-mode .tab.active { background: var(--purple); border-color: var(--purple); color: #fff; }
-body.light-mode .tab-see-all { color: var(--purple-light); }
+body.light-mode .tab-see-all {
+  color: var(--purple-light);
+  border-color: rgba(107,70,193,.18);
+  background: rgba(107,70,193,.08);
+}
 body.light-mode .act-item { background: var(--card); border-color: var(--border); }
 body.light-mode .act-item:hover { background: var(--card2); }
 body.light-mode .act-name { color: var(--text); }
@@ -182,7 +190,21 @@ body.light-mode .add-savings-btn { background: var(--savings-purple); }
 body.light-mode .toast { background: var(--card); border-color: var(--border); color: var(--text); }
 body.light-mode .form-group label { color: var(--muted); }
 body.light-mode .page-icon { background: linear-gradient(135deg, rgba(125, 99, 204, 0.15) 0%, rgba(150, 115, 255, 0.1) 100%); }
-body.light-mode .see-all-link { color: var(--purple-light); }
+body.light-mode .see-all-link {
+  color: var(--purple-light);
+  border-color: rgba(107,70,193,.18);
+  background: rgba(107,70,193,.08);
+}
+body.light-mode .tx-action {
+  color: #b34545;
+  border-color: rgba(179,69,69,.22);
+  background: rgba(222,92,92,.08);
+}
+body.light-mode .tx-action:hover {
+  color: #8f2f2f;
+  border-color: rgba(179,69,69,.32);
+  background: rgba(222,92,92,.14);
+}
 
 /* Light mode for Settings screen elements */
 body.light-mode .badge { background: var(--purple) !important; color: #fff !important; }
@@ -252,6 +274,26 @@ body.light-mode .modal { background: var(--card) !important; border-color: var(-
 body.light-mode .modal-title { color: var(--text) !important; }
 body.light-mode .modal-submit-btn { background: #6b46c1 !important; color: #fff !important; }
 body.light-mode .modal-close { color: var(--muted) !important; }
+body.light-mode .confirm-title { color: #1a1a2e !important; }
+body.light-mode .confirm-msg { color: rgba(26, 26, 46, 0.76) !important; }
+body.light-mode .confirm-msg strong { color: #1a1a2e !important; }
+body.light-mode .btn-cancel {
+  background: rgba(20, 6, 75, 0.06) !important;
+  color: rgba(26, 26, 46, 0.84) !important;
+  border-color: rgba(20, 6, 75, 0.14) !important;
+}
+body.light-mode .btn-cancel:hover {
+  background: rgba(20, 6, 75, 0.11) !important;
+  color: #1a1a2e !important;
+}
+body.light-mode .btn-confirm-del {
+  background: #de5c5c !important;
+  border-color: #de5c5c !important;
+}
+body.light-mode .btn-confirm-del:hover {
+  background: #c84f4f !important;
+  border-color: #c84f4f !important;
+}
 
 /* Light mode for activity title */
 body.light-mode .act-title { color: var(--text) !important; }
@@ -277,6 +319,48 @@ body {
   color: var(--text);
   display: flex;
   min-height: 100vh;
+}
+
+body.app-loading {
+  overflow: hidden;
+}
+
+body.app-loading::before {
+  content: "Syncing your live budget...";
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 64px;
+  background:
+    radial-gradient(circle at top, rgba(107, 70, 193, 0.2), transparent 42%),
+    linear-gradient(180deg, #12083a 0%, #0b0b18 100%);
+  color: #fff;
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  z-index: 1900;
+}
+
+body.app-loading::after {
+  content: "";
+  position: fixed;
+  top: calc(50% - 48px);
+  left: 50%;
+  width: 42px;
+  height: 42px;
+  margin-left: -21px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.18);
+  border-top-color: #9673FF;
+  animation: appBootSpin 0.85s linear infinite;
+  z-index: 1901;
+}
+
+@keyframes appBootSpin {
+  to { transform: rotate(360deg); }
 }
 
 /* ═══════════════════════════════
@@ -475,6 +559,20 @@ body {
 }
 .form-input:focus { border-color: var(--purple); }
 .form-input::placeholder { color: #666; font-family: var(--font); font-size: var(--font-sm); }
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+*::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
 .amount-wrap {
   display: flex;
   align-items: center;
@@ -608,34 +706,75 @@ body.light-mode .amount-wrap .amount-input {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   margin-bottom: 14px;
 }
 .btn-filter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   background: var(--card2);
   border: 1px solid var(--border);
-  border-radius: 9px;
+  border-radius: 999px;
   color: var(--text);
   font-family: var(--font);
   font-size: 13px;
-  padding: 8px 16px;
+  font-weight: 600;
+  padding: 10px 16px;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
 }
-.btn-filter:hover { background: var(--border); }
-.toolbar-right { display: flex; align-items: center; gap: 14px; }
-.see-all-link { font-size: 13px; color: var(--purple-light); cursor: pointer; }
-.see-all-link:hover { text-decoration: underline; }
+.btn-filter:hover {
+  background: var(--border);
+  border-color: rgba(175,174,215,0.34);
+  transform: translateY(-1px);
+}
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.see-all-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--purple-light);
+  cursor: pointer;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(175,174,215,0.18);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-family: var(--font);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.see-all-link:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(175,174,215,0.32);
+  color: #fff;
+}
 .btn-search-hist {
-  display: flex; align-items: center; gap: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   background: var(--card2);
   border: 1px solid var(--border);
-  border-radius: 9px;
+  border-radius: 999px;
   color: var(--muted);
   font-family: var(--font);
   font-size: 12px;
-  padding: 8px 14px;
+  font-weight: 600;
+  padding: 10px 14px;
   cursor: pointer;
   transition: all 0.15s;
+  white-space: nowrap;
 }
 .btn-search-hist:hover { color: var(--text); background: var(--border); }
 
@@ -663,7 +802,10 @@ body.light-mode .amount-wrap .amount-input {
   font-size: 12px;
   white-space: nowrap;
 }
-.tx-row td:last-child { border-radius: 0 12px 12px 0; }
+.tx-row td:last-child {
+  border-radius: 0 12px 12px 0;
+  text-align: right;
+}
 .tx-cat-wrap { display: flex; align-items: center; gap: 12px; }
 .tx-cat-icon { font-size: 20px; }
 .tx-cat-name { font-weight: 600; font-size: 13px; }
@@ -671,7 +813,26 @@ body.light-mode .amount-wrap .amount-input {
 .tx-amount { font-family: var(--mono); font-weight: 600; font-size: 14px; }
 .tx-amount.neg { color: var(--red); }
 .tx-amount.pos { color: var(--green); }
-.tx-action { color: var(--muted); font-size: 16px; letter-spacing: 2px; }
+.tx-action {
+  appearance: none;
+  border: 1px solid rgba(222,92,92,0.28);
+  background: rgba(222,92,92,0.14);
+  color: #ffd5d5;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.15s;
+}
+.tx-action:hover {
+  background: rgba(222,92,92,0.22);
+  border-color: rgba(222,92,92,0.42);
+  color: #fff;
+  transform: translateY(-1px);
+}
 
 /* ═══════════════════════════════
    DASHBOARD
@@ -744,7 +905,27 @@ body.light-mode .amount-wrap .amount-input {
 }
 .summary-head-left .title { font-size: var(--font-md); font-weight: 600; }
 .summary-head-left .sub { font-size: var(--font-xs); color: #9999cc; margin-top: 2px; }
-.see-all-s { font-size: var(--font-xs); color: #aaa8ff; cursor: pointer; }
+.see-all-s {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  font-size: var(--font-xs);
+  font-weight: 600;
+  color: #aaa8ff;
+  cursor: pointer;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(175,174,215,0.18);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-family: var(--font);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.see-all-s:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(175,174,215,0.32);
+  color: #fff;
+}
 .bars-row { display: flex; gap: 10px; align-items: flex-end; }
 .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .bar-amt { font-size: 11px; color: #9999cc; font-family: var(--mono); }
@@ -987,11 +1168,26 @@ body.light-mode .amount-wrap .amount-input {
 .tab:hover:not(.active) { border-color: var(--purple-light); color: var(--text); }
 .tab-see-all {
   margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
   font-size: 13px;
+  font-weight: 600;
   color: var(--purple-light);
   cursor: pointer;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(175,174,215,0.18);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-family: var(--font);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
-.tab-see-all:hover { text-decoration: underline; }
+.tab-see-all:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(175,174,215,0.32);
+  color: #fff;
+}
 
 /* ── ACTIVITY LIST ── */
 .act-list { display: flex; flex-direction: column; gap: 10px; }
@@ -1764,10 +1960,19 @@ body.light-mode .amount-wrap .amount-input {
   
   .history-toolbar {
     flex-direction: row;
+    align-items: center;
   }
   
   .toolbar-right {
     width: auto;
+    justify-content: flex-end;
+  }
+
+  .history-toolbar .btn-filter,
+  .history-toolbar .btn-search-hist,
+  .history-toolbar .see-all-link {
+    width: auto;
+    margin-bottom: 0;
   }
 }
 
@@ -1829,6 +2034,30 @@ body.light-mode .amount-wrap .amount-input {
   letter-spacing: -0.02em;
   line-height: 1;
   margin-bottom: 10px;
+  white-space: nowrap;
+  overflow: visible !important;
+  scrollbar-width: none;
+}
+.s-amount::-webkit-scrollbar,
+.cat-name::-webkit-scrollbar,
+.cat-amounts::-webkit-scrollbar,
+.goal-name::-webkit-scrollbar,
+.goal-amounts::-webkit-scrollbar,
+.stat-box-val::-webkit-scrollbar,
+.tx-amount::-webkit-scrollbar,
+.report-stat-val::-webkit-scrollbar,
+.bar-labels span::-webkit-scrollbar {
+  display: none;
+}
+.cat-name,
+.goal-name,
+.stat-box-val,
+.tx-amount,
+.report-stat-val,
+.bar-labels span {
+  overflow: visible !important;
+  white-space: nowrap;
+  scrollbar-width: none;
 }
 
 .s-sub {
@@ -1975,6 +2204,8 @@ body.light-mode .amount-wrap .amount-input {
   font-size: 13px;
   color: rgba(255,255,255,0.45);
   white-space: nowrap;
+  overflow: visible !important;
+  scrollbar-width: none;
 }
 
 .cat-right {
@@ -2221,14 +2452,14 @@ body.light-mode .amount-wrap .amount-input {
 
 .confirm-btns { display: flex; gap: 10px; }
 .confirm-btns button {
-  flex: 1; padding: 12px; border: none; border-radius: 11px;
+  flex: 1; padding: 12px; border: 1px solid transparent; border-radius: 11px;
   font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700;
   cursor: pointer; transition: all 0.18s;
 }
 
-.btn-cancel { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); }
+.btn-cancel { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); border-color: rgba(255,255,255,0.12); }
 .btn-cancel:hover { background: rgba(255,255,255,0.14); color: #fff; }
-.btn-confirm-del { background: rgba(222,92,92,0.85); color: #fff; }
+.btn-confirm-del { background: rgba(222,92,92,0.85); color: #fff; border-color: rgba(222,92,92,0.85); }
 .btn-confirm-del:hover { background: var(--accent); }
 
 /* TOAST */
@@ -2309,6 +2540,8 @@ body.light-mode .amount-wrap .amount-input {
   font-size: 13px;
   color: rgba(255,255,255,0.45);
   white-space: nowrap;
+  overflow: visible !important;
+  scrollbar-width: none;
 }
 
 .goal-right {
@@ -2431,9 +2664,14 @@ body.light-mode .amount-wrap .amount-input {
   opacity:0;pointer-events:none;
   transform:translateY(14px) scale(.97);
   transform-origin:bottom right;
+  resize:both;
   transition:opacity .22s cubic-bezier(.22,1,.36,1),transform .22s cubic-bezier(.22,1,.36,1);
 }
 .chat-win.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1)}
+.chat-win.resizing{
+  transition:none;
+  user-select:none;
+}
 
 /* Chat header */
 .chat-hdr{
@@ -2442,7 +2680,11 @@ body.light-mode .amount-wrap .amount-input {
   background:var(--chat-header, linear-gradient(135deg,#4a2fa0,#6b46c1));
   border-bottom:1px solid rgba(255,255,255,.08);
   flex-shrink:0;
+  cursor:grab;
+  touch-action:none;
+  user-select:none;
 }
+.chat-hdr.dragging{cursor:grabbing}
 .chat-hdr-left{display:flex;align-items:center;gap:12px}
 .chat-av{
   width:38px;height:38px;
@@ -2457,6 +2699,7 @@ body.light-mode .amount-wrap .amount-input {
   width:30px;height:30px;border-radius:50%;cursor:pointer;
   font-size:14px;display:flex;align-items:center;justify-content:center;
   transition:background .15s;
+  touch-action:auto;
 }
 .chat-x:hover{background:rgba(255,255,255,.28)}
 
@@ -2610,17 +2853,75 @@ body.light-mode .amount-wrap .amount-input {
 .send-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
 .send-btn svg{width:16px;height:16px;fill:#fff}
 
+.chat-resize{
+  position:absolute;
+  right:0;
+  bottom:0;
+  width:30px;
+  height:30px;
+  border:0;
+  background:transparent;
+  color:rgba(175,174,215,.78);
+  cursor:nwse-resize;
+  display:flex;
+  align-items:flex-end;
+  justify-content:flex-end;
+  padding:0 6px 6px 0;
+  z-index:2;
+  pointer-events:none;
+}
+.chat-resize::before{
+  content:"";
+  width:12px;
+  height:12px;
+  border-right:2px solid currentColor;
+  border-bottom:2px solid currentColor;
+  opacity:.92;
+}
+.chat-resize:hover{color:#fff}
+body.light-mode .chat-resize{color:rgba(90,74,138,.72)}
+
+.notification-note{
+  margin-top:10px;
+  font-size:12px;
+  line-height:1.5;
+  color:rgba(255,255,255,.58);
+}
+body.light-mode .notification-note{
+  color:rgba(26,26,46,.68);
+}
+
+.notification-textarea{
+  width:100%;
+  min-height:84px;
+  resize:vertical;
+  background:#f0eef8;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:10px;
+  padding:12px 14px;
+  color:#1a1040;
+  font-family:'Sora',sans-serif;
+  font-size:13px;
+  font-weight:500;
+  line-height:1.5;
+  outline:none;
+}
+.notification-textarea::placeholder{
+  color:rgba(26,16,64,.42);
+}
+
 /* Responsive chatbot */
 @media(max-width:480px){
-  .chat-win{width:calc(100vw - 20px);right:10px;bottom:calc(86px + var(--safe-bottom));height:min(560px, calc(100dvh - 104px - var(--safe-bottom)));max-height:calc(100dvh - 104px - var(--safe-bottom));min-height:min(440px, calc(100dvh - 104px - var(--safe-bottom)));border-radius:20px}
+  .chat-win{width:calc(100vw - 20px);right:10px;bottom:calc(86px + var(--safe-bottom));height:min(560px, calc(100dvh - 104px - var(--safe-bottom)));max-height:calc(100dvh - 104px - var(--safe-bottom));min-height:min(440px, calc(100dvh - 104px - var(--safe-bottom)));border-radius:20px;resize:none}
   .chat-msgs{padding:16px 12px 14px}
   .chips{padding:10px 12px 0}
   .chat-bar{padding:10px 12px 12px}
   .chat-bubble{bottom:calc(20px + var(--safe-bottom));right:16px}
+  .chat-resize{display:none}
 }
 </style>
 </head>
-<body>
+<body class="app-loading">
 
 <!-- ══════════ SIDEBAR ══════════ -->
 <aside class="sidebar">
@@ -2677,16 +2978,16 @@ body.light-mode .amount-wrap .amount-input {
     <div class="stat-grid">
       <div class="stat-box">
         <div class="stat-box-label">Total expenses</div>
-        <div class="stat-box-val red">₵ 500</div>
+        <div class="stat-box-val red">--</div>
       </div>
       <div class="stat-box">
         <div class="stat-box-label">Total income</div>
-        <div class="stat-box-val green">₵ 5,000</div>
+        <div class="stat-box-val green">--</div>
       </div>
       <div class="stat-box">
         <div class="stat-box-label">Budget</div>
-        <div class="stat-box-val">₵1050/1050</div>
-        <div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div>
+        <div class="stat-box-val">-- / --</div>
+        <div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div>
       </div>
     </div>
 
@@ -2696,27 +2997,15 @@ body.light-mode .amount-wrap .amount-input {
           <div class="title">Summary</div>
           <div class="sub">This week</div>
         </div>
-        <span class="see-all-s">see all</span>
+        <button class="see-all-s" type="button" onclick="show('report')">See all</button>
       </div>
       <div class="bars-row">
-        <div class="bar-col"><span class="bar-amt">₵25</span><div class="bar-outer"><div class="bar-inner hl" style="height:28%"></div></div><span class="bar-day hl">Mon</span></div>
-        <div class="bar-col"><span class="bar-amt">₵75</span><div class="bar-outer"><div class="bar-inner" style="height:72%"></div></div><span class="bar-day">Tue</span></div>
-        <div class="bar-col"><span class="bar-amt">₵100</span><div class="bar-outer"><div class="bar-inner" style="height:95%"></div></div><span class="bar-day">Wed</span></div>
-        <div class="bar-col"><span class="bar-amt">₵50</span><div class="bar-outer"><div class="bar-inner" style="height:50%"></div></div><span class="bar-day">Thu</span></div>
-        <div class="bar-col"><span class="bar-amt">₵100</span><div class="bar-outer"><div class="bar-inner" style="height:95%"></div></div><span class="bar-day">Fri</span></div>
-        <div class="bar-col"><span class="bar-amt">₵100</span><div class="bar-outer"><div class="bar-inner" style="height:95%"></div></div><span class="bar-day">Sat</span></div>
-        <div class="bar-col"><span class="bar-amt">₵50</span><div class="bar-outer"><div class="bar-inner" style="height:50%"></div></div><span class="bar-day">Sun</span></div>
+        <div class="empty-state">Loading weekly spending...</div>
       </div>
     </div>
 
     <div class="cat-grid">
-      <div class="cat-row"><div class="cat-row-top"><span class="cat-emoji">🍔</span><span class="cat-name">Food and Drinks</span><span class="cat-ratio">59/300</span></div><div class="cat-prog"><div class="cat-prog-fill" style="width:20%;background:#6c63ff;"></div></div></div>
-      <div class="cat-row"><div class="cat-row-top"><span class="cat-emoji">🚕</span><span class="cat-name">Transport</span><span class="cat-ratio">19/150</span></div><div class="cat-prog"><div class="cat-prog-fill" style="width:13%;background:#ff4757;"></div></div></div>
-      <div class="cat-row"><div class="cat-row-top"><span class="cat-emoji">🎬</span><span class="cat-name">Entertainment</span><span class="cat-ratio">16/100</span></div><div class="cat-prog"><div class="cat-prog-fill" style="width:16%;background:#ff9f43;"></div></div></div>
-      <div class="cat-row"><div class="cat-row-top"><span class="cat-emoji">📄</span><span class="cat-name">Bills</span><span class="cat-ratio">120/200</span></div><div class="cat-prog"><div class="cat-prog-fill" style="width:60%;background:#54a0ff;"></div></div></div>
-      <div class="cat-row"><div class="cat-row-top"><span class="cat-emoji">💊</span><span class="cat-name">Medication</span><span class="cat-ratio">25/200</span></div><div class="cat-prog"><div class="cat-prog-fill" style="width:12%;background:#00d68f;"></div></div></div>
-      <div class="cat-row"><div class="cat-row-top"><span class="cat-emoji">🎓</span><span class="cat-name">Education</span><span class="cat-ratio">25/100</span></div><div class="cat-prog"><div class="cat-prog-fill" style="width:25%;background:#ff6b9d;"></div></div></div>
-      <div class="cat-row"><div class="cat-row-top"><span class="cat-emoji">🚀</span><span class="cat-name">Others</span><span class="cat-ratio">200/350</span></div><div class="cat-prog"><div class="cat-prog-fill" style="width:57%;background:#a29bfe;"></div></div></div>
+      <div class="empty-state">Loading tracked categories...</div>
     </div>
   </section>
 
@@ -2789,11 +3078,11 @@ body.light-mode .amount-wrap .amount-input {
         <button class="modal-close" onclick="closeModal('modal-set-budget')">✕</button>
       </div>
       <div class="form-group">
-        <label>Month</label>
+        <label id="sb-month-label">Month</label>
         <input type="month" id="sb-month"/>
       </div>
       <div class="form-group">
-        <label>Total Budget Amount (₵)</label>
+        <label id="sb-total-label">Total Budget Amount (₵)</label>
         <input type="number" id="sb-amount" placeholder="e.g. 2000" min="1"/>
       </div>
       <div class="modal-error" id="sb-error"></div>
@@ -2809,15 +3098,15 @@ body.light-mode .amount-wrap .amount-input {
         <button class="modal-close" onclick="closeModal('modal-add-category')">✕</button>
       </div>
       <div class="form-group">
-        <label>Category Name</label>
+        <label id="ac-name-label">Category Name</label>
         <input type="text" id="ac-name" placeholder="e.g. Groceries, Gym..."/>
       </div>
       <div class="form-group">
-        <label>Spending Limit (₵)</label>
+        <label id="ac-limit-label">Spending Limit (₵)</label>
         <input type="number" id="ac-limit" placeholder="e.g. 300" min="1"/>
       </div>
       <div class="form-group">
-        <label>Choose Emoji</label>
+        <label id="ac-emoji-label">Choose Emoji</label>
         <div class="emoji-row" id="emoji-row"></div>
       </div>
       <div class="modal-error" id="ac-error"></div>
@@ -2833,11 +3122,11 @@ body.light-mode .amount-wrap .amount-input {
         <button class="modal-close" onclick="closeModal('modal-edit-category')">✕</button>
       </div>
       <div class="form-group">
-        <label>Category Name</label>
+        <label id="ec-name-label">Category Name</label>
         <input type="text" id="ec-name"/>
       </div>
       <div class="form-group">
-        <label>Spending Limit (₵)</label>
+        <label id="ec-limit-label">Spending Limit (₵)</label>
         <input type="number" id="ec-limit" min="1"/>
       </div>
       <div class="modal-error" id="ec-error"></div>
@@ -2888,6 +3177,18 @@ body.light-mode .amount-wrap .amount-input {
       <div class="confirm-btns">
         <button class="btn-cancel" onclick="closeModal('modal-confirm-cat')">Keep it</button>
         <button class="btn-confirm-del" onclick="confirmDeleteCategory()">Yes, delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-confirm-transaction" onclick="if(event.target===this)cancelDeleteTransaction()">
+    <div class="modal narrow">
+      <div class="confirm-emoji">🧾</div>
+      <div class="confirm-title">Delete this transaction?</div>
+      <div class="confirm-msg" id="confirm-transaction-msg"></div>
+      <div class="confirm-btns">
+        <button class="btn-cancel" type="button" onclick="cancelDeleteTransaction()">Keep it</button>
+        <button class="btn-confirm-del" type="button" onclick="confirmDeleteTransaction()">Yes, delete</button>
       </div>
     </div>
   </div>
@@ -2947,13 +3248,13 @@ body.light-mode .amount-wrap .amount-input {
     <input class="desc-input" type="text" placeholder="What was this for?" id="inp-desc"/>
 
     <div class="history-toolbar">
-      <button class="btn-filter">
+      <button class="btn-filter" type="button" onclick="openActivityFilters()">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:5px;"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
         Filters
       </button>
       <div class="toolbar-right">
-        <span class="see-all-link">See all</span>
-        <button class="btn-search-hist">
+        <button class="see-all-link" type="button" onclick="openActivityHistory()">See all</button>
+        <button class="btn-search-hist" type="button" onclick="openActivitySearch()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           Filter history
         </button>
@@ -2971,22 +3272,7 @@ body.light-mode .amount-wrap .amount-input {
       </thead>
       <tbody id="tx-history">
         <tr class="tx-row">
-          <td>Mar 3, 2026</td>
-          <td><div class="tx-cat-wrap"><span class="tx-cat-icon">🍔</span><div><div class="tx-cat-name">Grocery Store</div><div class="tx-cat-sub">Food &amp; Drinks</div></div></div></td>
-          <td><span class="tx-amount neg">-₵52.30</span></td>
-          <td><span class="tx-action">•••</span></td>
-        </tr>
-        <tr class="tx-row">
-          <td>Mar 4, 2026</td>
-          <td><div class="tx-cat-wrap"><span class="tx-cat-icon">🚕</span><div><div class="tx-cat-name">Uber Ride</div><div class="tx-cat-sub">Transport</div></div></div></td>
-          <td><span class="tx-amount neg">-₵18.50</span></td>
-          <td><span class="tx-action">•••</span></td>
-        </tr>
-        <tr class="tx-row">
-          <td>Mar 6, 2026</td>
-          <td><div class="tx-cat-wrap"><span class="tx-cat-icon">🚀</span><div><div class="tx-cat-name">Salary</div><div class="tx-cat-sub">Other</div></div></div></td>
-          <td><span class="tx-amount pos">+₵4200.00</span></td>
-          <td><span class="tx-action">•••</span></td>
+          <td colspan="4" style="text-align:center;color:var(--muted)">Loading transactions...</td>
         </tr>
       </tbody>
     </table>
@@ -3016,18 +3302,11 @@ body.light-mode .amount-wrap .amount-input {
       <button class="tab active" onclick="filterTab(this,'all')">All</button>
       <button class="tab" onclick="filterTab(this,'expense')">Expenses</button>
       <button class="tab" onclick="filterTab(this,'income')">Income</button>
-      <span class="tab-see-all">See all</span>
+      <button class="tab-see-all" type="button" onclick="clearActivityFilters()">See all</button>
     </div>
 
     <div class="act-list" id="act-list">
-      <div class="act-item" data-type="expense" data-name="grocery store"><div class="act-icon-wrap">🍔</div><div class="act-info"><div class="act-name">Grocery Store</div><div class="act-cat">Food &amp; Drinks</div></div><span class="act-amt neg">-₵52.30</span></div>
-      <div class="act-item" data-type="expense" data-name="uber ride"><div class="act-icon-wrap">🚕</div><div class="act-info"><div class="act-name">Uber Ride</div><div class="act-cat">Transport</div></div><span class="act-amt neg">-₵18.50</span></div>
-      <div class="act-item" data-type="income" data-name="salary"><div class="act-icon-wrap">🚀</div><div class="act-info"><div class="act-name">Salary</div><div class="act-cat">Other</div></div><span class="act-amt pos">+₵5000.00</span></div>
-      <div class="act-item" data-type="expense" data-name="netflix"><div class="act-icon-wrap">🎬</div><div class="act-info"><div class="act-name">Netflix</div><div class="act-cat">Entertainment</div></div><span class="act-amt neg">-₵15.99</span></div>
-      <div class="act-item" data-type="expense" data-name="electric bill"><div class="act-icon-wrap">📄</div><div class="act-info"><div class="act-name">Electric Bill</div><div class="act-cat">Bills</div></div><span class="act-amt neg">-₵89.00</span></div>
-      <div class="act-item" data-type="expense" data-name="pharmacy"><div class="act-icon-wrap">💊</div><div class="act-info"><div class="act-name">Pharmacy</div><div class="act-cat">Health</div></div><span class="act-amt neg">-₵24.50</span></div>
-      <div class="act-item" data-type="expense" data-name="coffee shop"><div class="act-icon-wrap">🍔</div><div class="act-info"><div class="act-name">Coffee Shop</div><div class="act-cat">Food &amp; Drinks</div></div><span class="act-amt neg">-₵6.80</span></div>
-      <div class="act-item" data-type="expense" data-name="education"><div class="act-icon-wrap">🎓</div><div class="act-info"><div class="act-name">Education</div><div class="act-cat">Education</div></div><span class="act-amt neg">-₵6.80</span></div>
+      <div class="empty-state">Loading activity...</div>
     </div>
   </section>
 
@@ -3040,85 +3319,9 @@ body.light-mode .amount-wrap .amount-input {
 
     <div class="report-grid">
       <div class="report-card">
-        <div class="report-card-title">Income Sources</div>
+        <div class="report-card-title">Preparing your report...</div>
         <div class="report-stat">
-          <span class="report-stat-label">Salary</span>
-          <span class="report-stat-val pos">+₵5,000</span>
-        </div>
-        <div class="report-stat">
-          <span class="report-stat-label">Freelance</span>
-          <span class="report-stat-val pos">+₵500</span>
-        </div>
-        <div class="report-stat">
-          <span class="report-stat-label">Other Income</span>
-          <span class="report-stat-val pos">+₵200</span>
-        </div>
-        <div class="report-stat" style="border-top: 2px solid var(--border); margin-top: 12px; padding-top: 16px;">
-          <span class="report-stat-label" style="font-weight: 600;">Total Income</span>
-          <span class="report-stat-val pos" style="font-size: 18px;">+₵5,700</span>
-        </div>
-      </div>
-
-      <div class="report-card">
-        <div class="report-card-title">Expense Breakdown</div>
-        <div class="report-stat">
-          <span class="report-stat-label">Food & Drinks</span>
-          <span class="report-stat-val neg">-₵350</span>
-        </div>
-        <div class="report-stat">
-          <span class="report-stat-label">Transport</span>
-          <span class="report-stat-val neg">-₵120</span>
-        </div>
-        <div class="report-stat">
-          <span class="report-stat-label">Entertainment</span>
-          <span class="report-stat-val neg">-₵89</span>
-        </div>
-        <div class="report-stat">
-          <span class="report-stat-label">Bills</span>
-          <span class="report-stat-val neg">-₵250</span>
-        </div>
-        <div class="report-stat" style="border-top: 2px solid var(--border); margin-top: 12px; padding-top: 16px;">
-          <span class="report-stat-label" style="font-weight: 600;">Total Expenses</span>
-          <span class="report-stat-val neg" style="font-size: 18px;">-₵809</span>
-        </div>
-      </div>
-
-      <div class="report-card">
-        <div class="report-card-title">Spending by Category</div>
-        <div class="chart-with-y-axis">
-          <div class="chart-y-axis">
-            <span>₵5K</span>
-            <span>₵3K</span>
-            <span>₵1K</span>
-            <span>₵0</span>
-          </div>
-          <div class="chart-container">
-            <div class="chart-bar" style="height: 70%;"></div>
-            <div class="chart-bar" style="height: 40%;"></div>
-            <div class="chart-bar" style="height: 55%;"></div>
-            <div class="chart-bar" style="height: 30%;"></div>
-            <div class="chart-bar" style="height: 25%;"></div>
-            <div class="chart-bar" style="height: 45%;"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="report-card">
-        <div class="report-card-title">Net Savings</div>
-        <div class="report-stat">
-          <span class="report-stat-label">Total Income</span>
-          <span class="report-stat-val pos">+₵5,700</span>
-        </div>
-        <div class="report-stat">
-          <span class="report-stat-label">Total Expenses</span>
-          <span class="report-stat-val neg">-₵809</span>
-        </div>
-        <div class="report-stat" style="border-top: 2px solid var(--green); margin-top: 12px; padding-top: 16px; background: rgba(0,214,143,0.1); border-radius: 8px; padding: 16px;">
-          <span class="report-stat-label" style="font-weight: 600; color: var(--green);">Net Savings</span>
-          <span class="report-stat-val pos" style="font-size: 24px;">+₵4,891</span>
-        </div>
-        <div style="margin-top: 16px; text-align: center; color: var(--muted); font-size: 13px;">
-          You saved 86% of your income this month!
+          <span class="report-stat-label">We are loading your latest income, expenses, and savings data.</span>
         </div>
       </div>
     </div>
@@ -3192,15 +3395,15 @@ body.light-mode .amount-wrap .amount-input {
         <button class="modal-close" onclick="closeSavingsModal('modal-add-goal')">✕</button>
       </div>
       <div class="form-group">
-        <label>Goal Name</label>
+        <label id="sg-name-label">Goal Name</label>
         <input type="text" id="sg-name" placeholder="e.g. Vacation, Emergency Fund..."/>
       </div>
       <div class="form-group">
-        <label>Target Amount (₵)</label>
+        <label id="sg-target-label">Target Amount (₵)</label>
         <input type="number" id="sg-target" placeholder="e.g. 5000" min="1"/>
       </div>
       <div class="form-group">
-        <label>Choose Icon</label>
+        <label id="sg-icon-label">Choose Icon</label>
         <div class="emoji-row" id="goal-emoji-row"></div>
       </div>
       <div class="modal-error" id="sg-error"></div>
@@ -3250,11 +3453,11 @@ body.light-mode .amount-wrap .amount-input {
         <button class="modal-close" onclick="closeSavingsModal('modal-edit-goal')">✕</button>
       </div>
       <div class="form-group">
-        <label>Goal Name</label>
+        <label id="eg-name-label">Goal Name</label>
         <input type="text" id="eg-name"/>
       </div>
       <div class="form-group">
-        <label>Target Amount (₵)</label>
+        <label id="eg-target-label">Target Amount (₵)</label>
         <input type="number" id="eg-target" min="1"/>
       </div>
       <div class="modal-error" id="eg-error"></div>
@@ -3295,7 +3498,7 @@ body.light-mode .amount-wrap .amount-input {
         <div class="fg" style="margin-bottom:18px">
           <label class="flabel" style="display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,.55);margin-bottom:8px">Name</label>
           <div class="irow" style="display:flex;gap:10px;align-items:center">
-            <input type="text" id="acc-name" value="User" placeholder="Your name" style="flex:1;width:100%;background:#f0eef8;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:12px 14px;color:#1a1040;font-family:'Sora',sans-serif;font-size:14px;font-weight:500;outline:none;-webkit-appearance:none;"/>
+            <input type="text" id="acc-name" value="" placeholder="Your name" style="flex:1;width:100%;background:#f0eef8;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:12px 14px;color:#1a1040;font-family:'Sora',sans-serif;font-size:14px;font-weight:500;outline:none;-webkit-appearance:none;"/>
             <button class="btn-inline" onclick="updateName()" style="padding:11px 18px;background:#2d2250;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#fff;font-family:'Sora',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;">Update</button>
           </div>
         </div>
@@ -3303,7 +3506,7 @@ body.light-mode .amount-wrap .amount-input {
         <div class="fg" style="margin-bottom:18px">
           <label class="flabel" style="display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,.55);margin-bottom:8px">E-mail</label>
           <div class="irow" style="display:flex;gap:10px;align-items:center">
-            <input type="email" id="acc-email" value="user@budgetflow.com" placeholder="Your email" style="flex:1;width:100%;background:#f0eef8;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:12px 14px;color:#1a1040;font-family:'Sora',sans-serif;font-size:14px;font-weight:500;outline:none;-webkit-appearance:none;"/>
+            <input type="email" id="acc-email" value="" placeholder="Your email" style="flex:1;width:100%;background:#f0eef8;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:12px 14px;color:#1a1040;font-family:'Sora',sans-serif;font-size:14px;font-weight:500;outline:none;-webkit-appearance:none;"/>
             <button class="btn-inline" onclick="updateEmail()" style="padding:11px 18px;background:#2d2250;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#fff;font-family:'Sora',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;">Update</button>
           </div>
         </div>
@@ -3367,12 +3570,25 @@ body.light-mode .amount-wrap .amount-input {
             <input type="checkbox" id="budg-remind" onchange="toggleReminder(this.checked)" style="width:18px;height:18px;background:#f0eef8;border:2px solid rgba(255,255,255,.25);border-radius:4px;cursor:pointer;accent-color:#6b46c1;flex-shrink:0;"/>
           </div>
 
+          <div class="settings-inline-row">
+            <span class="settings-inline-label">Push Notifications</span>
+            <input type="checkbox" id="push-remind" style="width:18px;height:18px;background:#f0eef8;border:2px solid rgba(255,255,255,.25);border-radius:4px;cursor:pointer;accent-color:#6b46c1;flex-shrink:0;"/>
+          </div>
+
+          <div class="notification-note" id="push-note">Enable push notifications to send a visit-the-app alert to this device.</div>
+
           <div class="notification-time-group" id="time-group">
             <label class="flabel" style="display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,.55);margin-bottom:8px">Reminder Time</label>
             <input type="time" id="remind-time" value="18:00" style="width:100%;background:#f0eef8;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:12px 14px;color:#1a1040;font-family:'Sora',sans-serif;font-size:14px;font-weight:500;outline:none;"/>
           </div>
 
+          <div class="notification-time-group">
+            <label class="flabel" style="display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,.55);margin-bottom:8px">Notification Message</label>
+            <textarea id="push-message" class="notification-textarea" placeholder="Budget Flow is ready. Tap to check your dashboard."></textarea>
+          </div>
+
           <button onclick="saveNotif()" style="width:100%;padding:12px;background:#6b46c1;border:none;border-radius:9px;color:#fff;font-family:'Sora',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px;">Save Notifications</button>
+          <button onclick="sendTestNotification()" style="width:100%;padding:12px;background:#2d2250;border:1px solid rgba(255,255,255,.12);border-radius:9px;color:#fff;font-family:'Sora',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:10px;">Send Notification</button>
         </div>
 
       </div>
@@ -3456,6 +3672,8 @@ body.light-mode .amount-wrap .amount-input {
       </button>
     </div>
   </div>
+
+  <button class="chat-resize" id="chat-resize-handle" type="button" aria-label="Resize assistant window"></button>
 </div>
 
 
@@ -3590,6 +3808,40 @@ function filterTab(btn, type) {
 
 function filterActivity(q) {
   applyFilters(q);
+}
+
+function clearActivityFilters() {
+  activeTab = 'all';
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelector('#screen-activity .tab')?.classList.add('active');
+  const search = document.querySelector('#screen-activity .search-bar');
+  if (search) {
+    search.value = '';
+  }
+  applyFilters('');
+}
+
+function openActivityHistory() {
+  show('activity');
+  clearActivityFilters();
+}
+
+function openActivitySearch() {
+  show('activity');
+  const search = document.querySelector('#screen-activity .search-bar');
+  if (!search) return;
+  setTimeout(() => {
+    search.focus();
+    search.select();
+  }, 0);
+}
+
+function openActivityFilters() {
+  openActivityHistory();
+  const filterTabs = document.querySelector('#screen-activity .filter-tabs');
+  setTimeout(() => {
+    filterTabs?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }, 0);
 }
 
 function applyFilters(q) {
@@ -4260,6 +4512,12 @@ let chatBubbleDragging=false;
 let chatBubbleBlockClick=false;
 let chatBubbleStartPoint={x:0,y:0};
 let chatBubblePointerOffset={x:0,y:0};
+const CHAT_SIZE_STORAGE_KEY='budgetflow_chat_window_size';
+const CHAT_POSITION_STORAGE_KEY='budgetflow_chat_window_pos';
+let chatWindowPointerId=null;
+let chatWindowDragging=false;
+let chatWindowStartPoint={x:0,y:0};
+let chatWindowPointerOffset={x:0,y:0};
 
 const SYS=`You are Budget AI, a friendly personal finance assistant built into Budget Flow.
 Help users with: setting budgets, savings goals, tracking spending, money-saving tips, and app features.
@@ -4405,6 +4663,162 @@ function scrollBot(force=false){
   setTimeout(()=>{w.scrollTop=w.scrollHeight;},30);
 }
 
+function isCompactChatViewport(){
+  return window.innerWidth <= 480;
+}
+
+function getChatWindowBounds(){
+  const horizontalPadding=isCompactChatViewport() ? 20 : 32;
+  const verticalPadding=isCompactChatViewport() ? 104 : 120;
+  const maxWidth=Math.max(320, Math.min(560, window.innerWidth - horizontalPadding));
+  const minWidth=Math.min(340, maxWidth);
+  const maxHeight=Math.max(420, window.innerHeight - verticalPadding);
+  const minHeight=Math.min(420, maxHeight);
+  return {minWidth, maxWidth, minHeight, maxHeight};
+}
+
+function clampChatWindowSize(width, height){
+  const bounds=getChatWindowBounds();
+  return {
+    width: Math.min(Math.max(width, bounds.minWidth), bounds.maxWidth),
+    height: Math.min(Math.max(height, bounds.minHeight), bounds.maxHeight)
+  };
+}
+
+function getChatWindowMargin(){
+  return isCompactChatViewport() ? 10 : 16;
+}
+
+function applyChatWindowSize(width, height, persist=true){
+  const chat=document.getElementById('chat-win');
+  if(!chat) return;
+
+  if(isCompactChatViewport()){
+    chat.style.removeProperty('width');
+    chat.style.removeProperty('height');
+    return;
+  }
+
+  const next=clampChatWindowSize(width, height);
+  chat.style.width=`${next.width}px`;
+  chat.style.height=`${next.height}px`;
+
+  if(persist){
+    localStorage.setItem(CHAT_SIZE_STORAGE_KEY, JSON.stringify(next));
+  }
+}
+
+function clampChatWindowPosition(left, top, width, height){
+  const margin=getChatWindowMargin();
+  const bounds=getChatWindowBounds();
+  const nextWidth=Number.isFinite(width) ? width : bounds.maxWidth;
+  const nextHeight=Number.isFinite(height) ? height : bounds.maxHeight;
+  const maxLeft=Math.max(margin, window.innerWidth - nextWidth - margin);
+  const maxTop=Math.max(margin, window.innerHeight - nextHeight - margin);
+
+  return {
+    left: Math.min(Math.max(left, margin), maxLeft),
+    top: Math.min(Math.max(top, margin), maxTop)
+  };
+}
+
+function applyChatWindowPosition(left, top, persist=true){
+  const chat=document.getElementById('chat-win');
+  if(!chat) return;
+
+  if(isCompactChatViewport()){
+    chat.style.removeProperty('left');
+    chat.style.removeProperty('top');
+    chat.style.removeProperty('right');
+    chat.style.removeProperty('bottom');
+    return;
+  }
+
+  const rect=chat.getBoundingClientRect();
+  const next=clampChatWindowPosition(left, top, chat.offsetWidth || rect.width, chat.offsetHeight || rect.height);
+  chat.style.left=`${next.left}px`;
+  chat.style.top=`${next.top}px`;
+  chat.style.right='auto';
+  chat.style.bottom='auto';
+
+  if(persist){
+    localStorage.setItem(CHAT_POSITION_STORAGE_KEY, JSON.stringify(next));
+  }
+}
+
+function initChatWindowSize(){
+  const chat=document.getElementById('chat-win');
+  if(!chat) return;
+
+  if(isCompactChatViewport()){
+    chat.style.removeProperty('width');
+    chat.style.removeProperty('height');
+    return;
+  }
+
+  const stored=localStorage.getItem(CHAT_SIZE_STORAGE_KEY);
+  if(stored){
+    try{
+      const parsed=JSON.parse(stored);
+      if(Number.isFinite(parsed?.width) && Number.isFinite(parsed?.height)){
+        applyChatWindowSize(parsed.width, parsed.height, false);
+        return;
+      }
+    }catch(_err){
+      localStorage.removeItem(CHAT_SIZE_STORAGE_KEY);
+    }
+  }
+
+  applyChatWindowSize(chat.offsetWidth, chat.offsetHeight, false);
+}
+
+function getDefaultChatWindowPosition(){
+  const chat=document.getElementById('chat-win');
+  if(!chat) return {left: 16, top: 16};
+
+  const styles=window.getComputedStyle(chat);
+  const right=parseFloat(styles.right) || 0;
+  const bottom=parseFloat(styles.bottom) || 0;
+  const width=chat.offsetWidth;
+  const height=chat.offsetHeight;
+
+  return clampChatWindowPosition(
+    window.innerWidth - right - width,
+    window.innerHeight - bottom - height,
+    width,
+    height
+  );
+}
+
+function initChatWindowPosition(){
+  const chat=document.getElementById('chat-win');
+  if(!chat) return;
+
+  if(isCompactChatViewport()){
+    chat.style.removeProperty('left');
+    chat.style.removeProperty('top');
+    chat.style.removeProperty('right');
+    chat.style.removeProperty('bottom');
+    return;
+  }
+
+  const stored=localStorage.getItem(CHAT_POSITION_STORAGE_KEY);
+  if(stored){
+    try{
+      const parsed=JSON.parse(stored);
+      if(Number.isFinite(parsed?.left) && Number.isFinite(parsed?.top)){
+        applyChatWindowPosition(parsed.left, parsed.top, false);
+        return;
+      }
+    }catch(_err){
+      localStorage.removeItem(CHAT_POSITION_STORAGE_KEY);
+    }
+  }
+
+  const next=getDefaultChatWindowPosition();
+  applyChatWindowPosition(next.left, next.top, false);
+}
+
 function getChatBubbleMargin(){
   return window.innerWidth <= 480 ? 12 : 16;
 }
@@ -4506,6 +4920,131 @@ function initChatBubble(){
   });
 }
 
+function initChatResize(){
+  const chat=document.getElementById('chat-win');
+  if(!chat) return;
+
+  initChatWindowSize();
+  initChatWindowPosition();
+
+  const persistChatWindowSize=()=>{
+    if(isCompactChatViewport()){
+      chat.style.removeProperty('width');
+      chat.style.removeProperty('height');
+      chat.style.removeProperty('left');
+      chat.style.removeProperty('top');
+      chat.style.removeProperty('right');
+      chat.style.removeProperty('bottom');
+      return;
+    }
+
+    const rect=chat.getBoundingClientRect();
+    const next=clampChatWindowSize(chat.offsetWidth || rect.width, chat.offsetHeight || rect.height);
+
+    if(Math.abs(next.width - rect.width) > 1){
+      chat.style.width=`${next.width}px`;
+    }
+
+    if(Math.abs(next.height - rect.height) > 1){
+      chat.style.height=`${next.height}px`;
+    }
+
+    localStorage.setItem(CHAT_SIZE_STORAGE_KEY, JSON.stringify(next));
+    applyChatWindowPosition(rect.left, rect.top, true);
+  };
+
+  if('ResizeObserver' in window){
+    const observer=new ResizeObserver(()=>{
+      persistChatWindowSize();
+      scrollBot(true);
+    });
+    observer.observe(chat);
+  }
+
+  window.addEventListener('mouseup',persistChatWindowSize);
+  window.addEventListener('resize',()=>{
+    if(isCompactChatViewport()){
+      chat.style.removeProperty('width');
+      chat.style.removeProperty('height');
+      chat.style.removeProperty('left');
+      chat.style.removeProperty('top');
+      chat.style.removeProperty('right');
+      chat.style.removeProperty('bottom');
+      return;
+    }
+
+    const stored=localStorage.getItem(CHAT_SIZE_STORAGE_KEY);
+    if(stored){
+      try{
+        const parsed=JSON.parse(stored);
+        if(Number.isFinite(parsed?.width) && Number.isFinite(parsed?.height)){
+          applyChatWindowSize(parsed.width, parsed.height, false);
+        }
+      }catch(_err){
+        localStorage.removeItem(CHAT_SIZE_STORAGE_KEY);
+      }
+    }
+
+    const rect=chat.getBoundingClientRect();
+    applyChatWindowSize(chat.offsetWidth || rect.width, chat.offsetHeight || rect.height, false);
+    applyChatWindowPosition(rect.left, rect.top, false);
+  });
+}
+
+function initChatWindowDrag(){
+  const chat=document.getElementById('chat-win');
+  const header=chat?.querySelector('.chat-hdr');
+  if(!chat || !header) return;
+
+  header.addEventListener('pointerdown',(event)=>{
+    if(isCompactChatViewport()) return;
+    if(event.button !== undefined && event.button !== 0) return;
+    if(event.target.closest('.chat-x')) return;
+
+    const rect=chat.getBoundingClientRect();
+    chatWindowPointerId=event.pointerId;
+    chatWindowDragging=false;
+    chatWindowStartPoint={x:event.clientX,y:event.clientY};
+    chatWindowPointerOffset={x:event.clientX-rect.left,y:event.clientY-rect.top};
+    chat.style.left=`${rect.left}px`;
+    chat.style.top=`${rect.top}px`;
+    chat.style.right='auto';
+    chat.style.bottom='auto';
+    header.classList.add('dragging');
+    chat.setPointerCapture?.(event.pointerId);
+    event.preventDefault();
+  });
+
+  chat.addEventListener('pointermove',(event)=>{
+    if(chatWindowPointerId !== event.pointerId) return;
+    const distance=Math.hypot(event.clientX-chatWindowStartPoint.x,event.clientY-chatWindowStartPoint.y);
+    if(distance > 6){
+      chatWindowDragging=true;
+    }
+    if(!chatWindowDragging) return;
+    applyChatWindowPosition(
+      event.clientX-chatWindowPointerOffset.x,
+      event.clientY-chatWindowPointerOffset.y,
+      false
+    );
+  });
+
+  const endWindowDrag=(event)=>{
+    if(chatWindowPointerId !== event.pointerId) return;
+    chat.releasePointerCapture?.(event.pointerId);
+    header.classList.remove('dragging');
+    if(chatWindowDragging){
+      const rect=chat.getBoundingClientRect();
+      applyChatWindowPosition(rect.left, rect.top, true);
+    }
+    chatWindowPointerId=null;
+    chatWindowDragging=false;
+  };
+
+  chat.addEventListener('pointerup',endWindowDrag);
+  chat.addEventListener('pointercancel',endWindowDrag);
+}
+
 document.addEventListener('pointerdown',(event)=>{
   if(!chatOpen) return;
   const chat=document.getElementById('chat-win');
@@ -4520,6 +5059,8 @@ document.addEventListener('keydown',(event)=>{
   }
 });
 initChatBubble();
+initChatResize();
+initChatWindowDrag();
 function now(){return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}
 function esc(s){
   return String(s||'')

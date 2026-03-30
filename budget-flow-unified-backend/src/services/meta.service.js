@@ -8,6 +8,7 @@ const {
   THEMES
 } = require("../utils/constants");
 const assistantConfigService = require("./assistant-config.service");
+const pushNotificationsService = require("./push-notifications.service");
 
 function getMeta() {
   return {
@@ -18,7 +19,8 @@ function getMeta() {
     languages: LANGUAGES,
     themes: THEMES,
     assistantSuggestions: ASSISTANT_SUGGESTIONS,
-    assistant: assistantConfigService.getAssistantClientState()
+    assistant: assistantConfigService.getAssistantClientState(),
+    push: pushNotificationsService.getClientConfig()
   };
 }
 
