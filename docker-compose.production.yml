@@ -119,6 +119,8 @@ services:
     depends_on:
       - auth-backend
       - feature-backend
+    environment:
+      ENABLE_INTERNAL_API_PROXY: "true"
     ports:
       - ${PUBLIC_PORT:-8080}:80
 
