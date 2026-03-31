@@ -1,547 +1,412 @@
-# Budget Flow
-## Application Documentation
+# Project Documentation
+## Budget Flow Web Application
 
-Version: 1.0  
-Date: March 31, 2026  
-Prepared for: Product handoff, deployment support, stakeholder review, and operational continuity
-
----
-
-## 1. Executive Summary
-
-Budget Flow is a web-based personal finance application designed to help users manage everyday money decisions with clarity and confidence. The product combines account onboarding, budgeting, savings tracking, transaction history, reporting, currency conversion support, and an AI-powered assistant into a single web experience.
-
-The current production deployment uses Render for hosting:
-
-- Frontend: `https://bf-web.onrender.com`
-- Auth API: `https://bf-auth-api.onrender.com`
-- Feature API: `https://bf-feature-api.onrender.com`
-- Database: Render PostgreSQL, shared privately between the backend services
-
-The current AI provider is Groq. Flowise remains optional and is not required for the live deployment.
+Version: 1.1  
+Date: March 31, 2026
 
 ---
 
-## 2. Product Overview
+## 1. Project Overview
 
-Budget Flow helps users:
+Budget Flow is a financial management web application built to help users manage everyday money more clearly.
 
-- create an account using email/password or Google sign-in
-- complete onboarding with country, language, and currency preferences
-- create and manage a monthly budget
-- group spending into categories
-- add, review, and delete transaction history
-- monitor savings goals, deposits, and withdrawals
-- generate financial summaries and reports
-- interact with an in-app assistant powered by live finance data and Groq
-- switch display currency while preserving base stored values
+The application allows users to:
 
-The application is intended to feel simple for first-time users while still being structured enough for regular monthly budgeting.
+- track income and expenses
+- manage personal budgets
+- monitor savings goals
+- view financial data in a simple dashboard
+- get quick insights from an AI assistant
 
----
+The main goal of the project is to simplify personal finance management and make it easier for users to understand their spending habits and make better decisions.
 
-## 3. Live Deployment Summary
+Similar systems are usually used to:
 
-### 3.1 Public Services
-
-The active hosted services are:
-
-- Frontend web app: `https://bf-web.onrender.com`
-- Authentication backend: `https://bf-auth-api.onrender.com`
-- Feature backend: `https://bf-feature-api.onrender.com`
-
-### 3.2 Current Hosting Layout
-
-The application is split into three hosted services:
-
-1. A frontend service that serves the authentication screens and the main application UI.
-2. An authentication backend that manages registration, login, password reset, session validation, and Google sign-in.
-3. A feature backend that manages budgeting, savings, reporting, transactions, settings, notifications, and the AI assistant.
-
-Both backend services connect to the same PostgreSQL database. The feature backend complements the auth backend schema rather than replacing it.
-
-### 3.3 Environment Relationship
-
-The frontend is configured with:
-
-- `AUTH_API_BASE_URL=https://bf-auth-api.onrender.com/api/auth`
-- `FEATURE_API_BASE_URL=https://bf-feature-api.onrender.com/api`
-
-The backend services are configured to trust the frontend origin:
-
-- `CLIENT_URL=https://bf-web.onrender.com`
-- `ALLOWED_ORIGINS=https://bf-web.onrender.com`
-- `FEATURE_FRONTEND_URL=https://bf-web.onrender.com` on the feature API
+- monitor transactions
+- create and maintain budgets
+- analyze financial behavior over time
 
 ---
 
-## 4. User-Facing Modules
+## 2. Objectives
 
-### 4.1 Authentication
+The core objectives of Budget Flow are:
+
+- provide a simple platform for tracking finances
+- help users make better financial decisions
+- automate calculations and budgeting logic
+- offer visual insights through the dashboard and reports
+
+---
+
+## 3. System Architecture
+
+Budget Flow uses a multi-layer architecture:
+
+```text
+Frontend (UI)
+   ↓
+Backend APIs (Auth + Feature services)
+   ↓
+Database (PostgreSQL)
+```
+
+### Frontend
+
+The frontend is built with:
+
+- HTML
+- CSS
+- JavaScript
+
+It is responsible for:
+
+- rendering the user interface
+- handling user interaction
+- navigation between screens
+
+### Backend
+
+The backend is split into two services.
+
+#### Auth Backend
+
+This service handles:
+
+- user registration
+- login
+- password reset
+- Google sign-in
+- JWT authentication
+
+#### Feature Backend
+
+This service handles:
+
+- budget logic
+- transactions
+- savings
+- reports
+- settings
+- AI assistant features
+
+### Database
+
+The application uses PostgreSQL.
+
+It stores data such as:
+
+- users
+- transactions
+- budgets
+- savings information
+- settings and preferences
+
+---
+
+## 4. Project Structure
+
+The project is organized into these main parts:
+
+```text
+Budget-Flow/
+│
+├── Budget-Flow/backend/              # Auth service
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── services/
+│   │   ├── routes/
+│   │   └── config/
+│
+├── budget-flow-unified-backend/      # Feature service
+│
+├── Budget-Flow/                      # Auth frontend pages
+├── Budget-Flow-feature-ohene/
+│   └── Budget-Flow-feature-ohene/    # Main app UI
+├── deployment/                       # Deployment files
+├── render.yaml                       # Render blueprint
+└── start-workflow.cmd                # Local workflow starter
+```
+
+---
+
+## 5. Installation and Setup
+
+### Requirements
+
+To run the project locally, you need:
+
+- Bun
+- PostgreSQL
+- Git
+
+### Steps
+
+#### 1. Clone the repository
+
+```bash
+git clone https://github.com/hmekpe/Budget-Flow.git
+cd Budget-Flow
+```
+
+#### 2. Install dependencies
+
+Install dependencies inside the backend folders with Bun.
+
+Auth backend:
+
+```bash
+cd Budget-Flow/backend
+bun install
+```
+
+Feature backend:
+
+```bash
+cd ../../budget-flow-unified-backend
+bun install
+```
+
+#### 3. Set up environment variables
+
+Create a `.env` file for the auth backend and feature backend.
+
+Example auth backend values:
+
+```env
+DATABASE_URL=postgresql://user:password@localhost:5432/budget_flow
+JWT_SECRET=your_secret
+CLIENT_URL=http://localhost:5500
+```
+
+Example feature backend values:
+
+```env
+DATABASE_URL=postgresql://user:password@localhost:5432/budget_flow
+JWT_SECRET=your_secret
+CLIENT_URL=http://localhost:5500
+FEATURE_FRONTEND_URL=http://localhost:5500
+```
+
+Important:
+
+- both backends must use the same `JWT_SECRET`
+- both backends should point to the same PostgreSQL database
+
+#### 4. Run the project
+
+You can use the local workflow starter:
+
+```powershell
+.\start-workflow.cmd
+```
+
+This local workflow is designed to start the app stack for development.
+
+---
+
+## 6. Authentication System
+
+Budget Flow uses JWT (JSON Web Tokens) for authentication.
+
+### Authentication Flow
+
+1. The user registers or logs in.
+2. The server generates a JWT.
+3. The token is stored on the client.
+4. The token is sent with protected API requests.
+
+The auth service also supports Google sign-in and password reset.
+
+---
+
+## 7. Core Functionalities
+
+### Budget Management
 
 Users can:
 
-- register with email and password
-- log in with existing credentials
-- sign in with Google
-- request a password reset
-- complete password reset through a secure tokenized link
+- create budgets
+- assign categories
+- track spending against those categories
 
-### 4.2 Dashboard
+### Transactions
+
+Users can:
+
+- add income and expenses
+- organize transactions by category
+- view transaction history
+- remove entries when needed
+
+### Dashboard
 
 The dashboard provides:
 
-- total expenses
-- total income
-- current budget progress
-- weekly summary visibility
-- quick insight into financial status
+- a financial overview
+- budget progress
+- income and expense summaries
+- quick visual understanding of spending behavior
 
-### 4.3 Budgeting
+### Advanced Features
 
-The budgeting module supports:
+The app also includes:
 
-- setting a monthly budget
-- creating budget categories
-- assigning spending limits
-- logging spend against categories
-- correcting spend values
-- editing and deleting categories
-
-### 4.4 Transactions and Activity
-
-The app supports:
-
-- adding transactions
-- categorizing entries
-- assigning dates and transaction type
-- viewing transaction history
-- filtering and reviewing activity
-- deleting entries with confirmation
-
-### 4.5 Savings
-
-Users can:
-
-- create savings goals
-- define target amounts
-- add money to a goal
-- withdraw from a goal
-- edit goal details
-- delete goals with confirmation
-
-### 4.6 Reports
-
-The reporting view surfaces:
-
-- income and expense totals
-- category trends
-- savings rate
-- net position
-- finance summaries for the current period
-
-### 4.7 AI Assistant
-
-The assistant is embedded in the application and can:
-
-- answer questions about budgets
-- summarize current spending
-- explain savings progress
-- identify top categories
-- fall back to rules-based responses if live AI is unavailable
-
-The current live AI path is Groq.
+- notifications and reminders
+- an AI financial assistant
+- multi-currency display support
 
 ---
 
-## 5. Architecture
+## 8. Database Design
 
-### 5.1 Frontend Structure
+The database is built around a few core entities.
 
-The frontend is composed of:
+### Example Tables
 
-- authentication pages under `Budget-Flow/`
-- the main app under `Budget-Flow-feature-ohene/Budget-Flow-feature-ohene/`
-- a runtime configuration layer injected at deploy time
+#### Users
 
-This allows the same frontend codebase to work locally and in hosted environments.
+- `id`
+- `email`
+- `password`
+- `created_at`
 
-### 5.2 Backend Structure
+#### Transactions
 
-The platform uses two Bun + Express APIs:
+- `id`
+- `user_id`
+- `amount`
+- `category`
+- `date`
+- `type`
 
-- Auth backend in `Budget-Flow/backend`
-- Feature backend in `budget-flow-unified-backend`
+Other tables in the system support:
 
-The auth backend owns:
-
-- users
-- password reset flow
-- Google sign-in
-- JWT issuance
-
-The feature backend owns:
-
-- dashboard summary
-- transactions
-- budgets and categories
-- savings goals
-- settings and preferences
-- push-notification APIs
-- assistant and finance insight endpoints
-
-### 5.3 Data Layer
-
-The application uses PostgreSQL as the system of record.
-
-The database model supports:
-
-- users
-- password reset tokens
-- transactions
-- monthly budgets
+- budgets
 - budget categories
 - savings goals
-- savings entries
-- user settings and preferences
-- notification settings and push subscription data
-
-### 5.4 Deployment Pattern
-
-The current production deployment is Render-based and separates:
-
-- static/frontend delivery
-- authentication service
-- feature service
-- managed PostgreSQL
-
-This is different from the optional Docker Compose deployment pattern in the repository, which is still available for server-based hosting.
+- settings
+- password reset tokens
 
 ---
 
-## 6. Key Technical Capabilities
+## 9. API Overview
 
-### 6.1 Runtime Configuration
+### Auth APIs
 
-The frontend does not hardcode backend domains. Instead, it reads runtime values injected at startup, which makes the same build portable across environments.
-
-### 6.2 Shared Authentication Model
-
-The feature backend validates the same JWTs issued by the auth backend. Both services must use the same `JWT_SECRET`.
-
-### 6.3 Currency-Aware Display
-
-Budget Flow preserves stored monetary values in the user’s base/account currency while allowing display conversion for the UI.
-
-### 6.4 AI Fallback
-
-If Groq is unavailable, the app still returns useful finance responses using rule-based logic rather than failing silently.
-
-### 6.5 Mobile and Desktop Support
-
-The user interface has been adjusted to work on both desktop and mobile layouts, including responsive chat handling and safer action confirmations.
-
----
-
-## 7. Third-Party Integrations
-
-### 7.1 Groq
-
-Groq powers the current live assistant mode using the OpenAI-compatible chat completions interface.
-
-Primary use:
-
-- finance-aware assistant responses
-- data-backed conversation inside the app
-
-### 7.2 ExchangeRate-API
-
-Exchange rates are used to support display-currency conversion while preserving stored values in the user’s account currency.
-
-Primary use:
-
-- settings currency view
-- converted value display
-- exchange-rate attribution in the UI
-
-### 7.3 Google Identity
-
-Google is used for optional federated sign-in.
-
-Primary use:
-
-- easier account creation
-- passwordless Google login path
-
-### 7.4 Email Delivery
-
-The auth backend supports password reset email sending, but the final delivery method depends on the deployed provider configuration.
-
-Operational note:
-
-- on free Render web services, outbound SMTP ports are restricted
-- production-grade forgot-password email should therefore use either a paid auth instance or an HTTP email API provider
-
----
-
-## 8. Authentication and Security
-
-### 8.1 Session Model
-
-Budget Flow uses JWT-based authentication.
-
-### 8.2 Google Sign-In Requirements
-
-Google sign-in requires:
-
-- a valid Google OAuth web client
-- the frontend origin added to Authorized JavaScript Origins
-- the `GOOGLE_CLIENT_ID` environment variable on the auth backend
-
-Current production frontend origin:
-
-- `https://bf-web.onrender.com`
-
-### 8.3 Password Reset
-
-Password reset uses:
-
-- time-limited reset tokens
-- hashed token storage
-- reset-link generation tied to the configured client URL
-
-### 8.4 Destructive Action Protection
-
-The app includes confirmation flows for irreversible actions such as:
-
-- deleting transactions
-- deleting categories
-- deleting savings goals
-- deleting the account
-
----
-
-## 9. Current API Surface
-
-### 9.1 Authentication API
-
-Base URL:
-
-- `https://bf-auth-api.onrender.com/api/auth`
-
-Primary routes:
+The authentication service exposes routes such as:
 
 - `POST /register`
 - `POST /login`
 - `POST /forgot-password`
 - `POST /reset-password`
-- `GET /me`
-- `GET /config`
 - `POST /google`
+- `GET /me`
 
-### 9.2 Feature API
+### Feature APIs
 
-Base URL:
+The feature service exposes routes such as:
 
-- `https://bf-feature-api.onrender.com/api`
+- `GET /transactions`
+- `POST /transactions`
+- `DELETE /transactions/:id`
+- `GET /budgets/current`
+- `GET /budgets/categories`
+- `GET /dashboard/summary`
+- `GET /reports/current`
+- `GET /savings/summary`
 
-Primary groups:
+### Third-Party APIs
 
-- `/meta`
-- `/app`
-- `/dashboard`
-- `/transactions`
-- `/budgets`
-- `/savings`
-- `/reports`
-- `/settings`
-- `/push`
-- `/assistant`
-- `/chat`
-- `/ai`
+#### Groq API
 
-### 9.3 Health Checks
+Groq is used to power the AI chatbot.
 
-Used for operational monitoring:
+- Endpoint: `POST https://api.groq.com/openai/v1/chat/completions`
+- Authentication: `GROQ_API_KEY`
+- Current model: `openai/gpt-oss-20b`
 
-- `https://bf-auth-api.onrender.com/api/health`
-- `https://bf-feature-api.onrender.com/api/health`
+Implemented in:
 
----
+- `budget-flow-unified-backend/src/services/assistant.service.js`
+- `budget-flow-unified-backend/src/services/assistant-config.service.js`
 
-## 10. Current Render Configuration
+Official docs:
 
-### 10.1 Frontend Service
+- https://console.groq.com/docs/openai
+- https://console.groq.com/docs/api-reference
 
-Service name:
+#### ExchangeRate-API
 
-- `bf-web`
+ExchangeRate-API is used for currency conversion in the app.
 
-Required env:
+- Endpoint: `https://open.er-api.com/v6/latest`
+- No API key required
+- Updates once per day
+- Rate-limited on the free plan
+- Requires attribution
 
-- `AUTH_API_BASE_URL=https://bf-auth-api.onrender.com/api/auth`
-- `FEATURE_API_BASE_URL=https://bf-feature-api.onrender.com/api`
+Implemented in:
 
-### 10.2 Auth Service
+- `budget-flow-unified-backend/src/services/exchange-rates.service.js`
 
-Service name:
+Official docs:
 
-- `bf-auth-api`
-
-Core env:
-
-- `DATABASE_URL`
-- `JWT_SECRET`
-- `JWT_EXPIRES_IN`
-- `CLIENT_URL=https://bf-web.onrender.com`
-- `ALLOWED_ORIGINS=https://bf-web.onrender.com`
-- `TRUST_PROXY=true`
-- `GOOGLE_CLIENT_ID`
-- email delivery variables when enabled
-
-### 10.3 Feature Service
-
-Service name:
-
-- `bf-feature-api`
-
-Core env:
-
-- `DATABASE_URL`
-- `JWT_SECRET` matching the auth service
-- `CLIENT_URL=https://bf-web.onrender.com`
-- `FEATURE_FRONTEND_URL=https://bf-web.onrender.com`
-- `ALLOWED_ORIGINS=https://bf-web.onrender.com`
-- `TRUST_PROXY=true`
-- Groq configuration values
-- `FLOWISE_ENABLED=false` in the current production setup
-
-### 10.4 Database
-
-The PostgreSQL service is internal to Render and should only be connected through the internal database URL copied from the same account and region.
+- https://www.exchangerate-api.com/docs/free
 
 ---
 
-## 11. Operational Guidance
+## 10. Deployment
 
-### 11.1 Recommended Health Checks
+Budget Flow is currently deployed on Render.
 
-After any deployment:
+### Current Live Services
 
-1. confirm auth health endpoint
-2. confirm feature health endpoint
-3. open the frontend auth page
-4. sign in with an existing account
-5. verify dashboard bootstrap
-6. test a chatbot prompt
+- Frontend: `https://bf-web.onrender.com`
+- Auth API: `https://bf-auth-api.onrender.com`
+- Feature API: `https://bf-feature-api.onrender.com`
 
-### 11.2 Safe Configuration Rules
+### Render Deployment Notes
 
-Always ensure:
+The current production setup uses:
 
-- both backends use the same `JWT_SECRET`
-- both backends point to the same Render Postgres instance
-- the database and backends are in the same Render region
-- the frontend env points to the exact live backend URLs
-- Google origins match the live frontend domain
+- one frontend service
+- one auth backend service
+- one feature backend service
+- one shared PostgreSQL database
 
-### 11.3 Updating the App
+To run the hosted app correctly:
 
-When code changes are pushed:
-
-- redeploy the relevant Render service
-- re-check frontend runtime config
-- re-test login, dashboard, and assistant flows
+- the frontend must point to the auth and feature API URLs
+- both backends must use the same `JWT_SECRET`
+- both backends must connect to the same PostgreSQL database
+- the database and backend services must be in the same Render region
 
 ---
 
-## 12. Support and Troubleshooting
+## 11. How to Run the App Successfully
 
-### 12.1 Common Issues
+If someone wants to run the app themselves, these are the most important things to remember:
 
-**Frontend loads but API calls fail**
+1. Install Bun, PostgreSQL, and Git.
+2. Clone the repository.
+3. Install dependencies in both backend folders.
+4. Create valid `.env` files for both services.
+5. Use the same database and JWT secret across the backends.
+6. Start the local workflow or run the services individually.
 
-Likely causes:
+For hosted deployment:
 
-- incorrect frontend runtime env
-- wrong backend URL
-- CORS mismatch
-
-**Backend crashes with `getaddrinfo ENOTFOUND`**
-
-Likely causes:
-
-- wrong `DATABASE_URL`
-- database in a different Render account
-- database in a different Render region
-- copied external vs internal URL mismatch
-
-**Google sign-in unavailable**
-
-Likely causes:
-
-- missing `GOOGLE_CLIENT_ID`
-- missing frontend origin in Google Cloud
-- app still in testing without the account added as a test user
-
-**Forgot password email does not arrive**
-
-Likely causes:
-
-- missing email provider config
-- SMTP blocked on free Render service
-- invalid sender credentials
-
-### 12.2 First Validation URLs
-
-- `https://bf-web.onrender.com/pages/auth.html`
-- `https://bf-web.onrender.com/runtime-config.js`
-- `https://bf-auth-api.onrender.com/api/health`
-- `https://bf-auth-api.onrender.com/api/auth/config`
-- `https://bf-feature-api.onrender.com/api/health`
+1. Create the database first.
+2. Deploy the auth backend.
+3. Deploy the feature backend.
+4. Deploy the frontend.
+5. Connect the frontend to the live backend URLs.
 
 ---
 
-## 13. Product Strengths
+## 12. Conclusion
 
-Budget Flow’s current strengths include:
+Budget Flow is a complete web application for personal finance management. It combines a user-friendly frontend, a split backend architecture, PostgreSQL data storage, and third-party integrations like Groq and ExchangeRate-API to deliver a modern budgeting experience.
 
-- clear separation of auth and feature services
-- modern hosted architecture
-- runtime-config-based frontend portability
-- AI fallback support
-- shared database model with logical service ownership
-- multi-currency awareness
-- improved mobile-friendliness
-- safer destructive actions
-
----
-
-## 14. Known Operational Notes
-
-- Flowise is not required in the current production setup.
-- Groq is the active assistant provider.
-- Password reset delivery should be finalized with a production email provider strategy suited to the Render plan.
-- The repository still includes server-based Docker deployment support for future migration if the team moves away from Render.
-
----
-
-## 15. Reference Files
-
-Repository files that support this documentation:
-
-- `README.md`
-- `HOSTING-HANDOVER.md`
-- `HOSTING-BEGINNER-GUIDE.md`
-- `PRODUCTION-DEPLOYMENT.md`
-- `render.yaml`
-- `Budget-Flow/backend/README.md`
-- `budget-flow-unified-backend/README.md`
-
----
-
-## 16. Conclusion
-
-Budget Flow is now structured as a real multi-service web product with a working hosted frontend, dedicated auth and feature APIs, managed data storage, and a live AI integration path. The current Render deployment is suitable for demonstration, review, and iterative product development, while the repository remains flexible enough to support future migration to another hosting model if required.
-
-This document is intended to make onboarding, review, troubleshooting, and stakeholder communication easier by giving one clear source of truth for the app’s purpose, architecture, deployment, and operating model.
+The project is designed to be practical, scalable, and easy to maintain. With the correct environment setup, it can be run locally for development or deployed to Render for production use.

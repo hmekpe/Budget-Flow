@@ -3,25 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Budget Flow Application Documentation</title>
+  <title>Budget Flow Web Application Documentation</title>
   <style>
     :root {
-      --ink: #1d1d24;
-      --muted: #5b5f6b;
-      --line: #d7dbe5;
-      --panel: #f6f7fb;
-      --brand: #3a1f87;
-      --accent: #6c48d8;
+      --ink: #20222b;
+      --muted: #606575;
+      --line: #d9dfeb;
+      --brand: #37207d;
+      --accent: #6f4ce0;
+      --panel: #f6f7fc;
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      background: #eef1f8;
       color: var(--ink);
-      background: #eef1f7;
-      line-height: 1.58;
+      font-family: "Segoe UI", Arial, sans-serif;
+      line-height: 1.6;
     }
 
     .page {
@@ -29,8 +29,8 @@
       min-height: 297mm;
       margin: 0 auto;
       background: #fff;
-      padding: 18mm 16mm 18mm;
-      box-shadow: 0 10px 35px rgba(23, 29, 45, 0.12);
+      padding: 18mm 16mm;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
     }
 
     .cover {
@@ -38,83 +38,74 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      background:
-        radial-gradient(circle at top right, rgba(108, 72, 216, 0.12), transparent 28%),
-        linear-gradient(180deg, #faf9ff 0%, #ffffff 100%);
-      border: 1px solid #ece8ff;
+      padding: 16mm;
       border-radius: 18px;
-      padding: 18mm 16mm;
+      background:
+        radial-gradient(circle at top right, rgba(111, 76, 224, 0.14), transparent 30%),
+        linear-gradient(180deg, #fbfbff 0%, #ffffff 100%);
+      border: 1px solid #ece9fb;
     }
 
     .eyebrow {
-      color: var(--accent);
       font-size: 12px;
-      font-weight: 700;
       letter-spacing: 0.24em;
       text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
     }
 
     h1 {
-      margin: 8mm 0 4mm;
+      margin: 8mm 0 3mm;
+      color: var(--brand);
       font-size: 34px;
       line-height: 1.1;
-      color: var(--brand);
     }
 
     h2 {
-      margin: 10mm 0 3mm;
-      font-size: 22px;
+      margin: 9mm 0 3mm;
       color: var(--brand);
-      page-break-after: avoid;
+      font-size: 22px;
     }
 
     h3 {
-      margin: 6mm 0 2mm;
+      margin: 5mm 0 2mm;
       font-size: 16px;
-      color: #2d2f39;
-      page-break-after: avoid;
+      color: #2e3240;
     }
 
     p, li {
-      font-size: 12.2px;
+      font-size: 12.1px;
     }
 
     p {
-      margin: 0 0 3.2mm;
+      margin: 0 0 3mm;
     }
 
     ul {
       margin: 0 0 4mm 5mm;
-      padding: 0 0 0 4mm;
+      padding-left: 4mm;
     }
 
     li {
-      margin: 0 0 1.6mm;
+      margin-bottom: 1.5mm;
     }
 
-    .meta,
-    .summary-grid,
-    .info-grid {
+    .grid {
       display: grid;
       gap: 10px;
     }
 
-    .meta {
+    .grid-3 {
       grid-template-columns: repeat(3, 1fr);
     }
 
-    .summary-grid {
-      grid-template-columns: repeat(3, 1fr);
-      margin-top: 8mm;
-    }
-
-    .info-grid {
+    .grid-2 {
       grid-template-columns: repeat(2, 1fr);
     }
 
     .card {
-      border: 1px solid var(--line);
       background: var(--panel);
+      border: 1px solid var(--line);
       border-radius: 12px;
       padding: 10px 12px;
     }
@@ -131,53 +122,21 @@
 
     .url {
       font-family: Consolas, "Courier New", monospace;
-      font-size: 11.5px;
+      font-size: 11.4px;
       word-break: break-all;
     }
 
     .section {
-      padding-top: 4mm;
-      border-top: 1px solid #eef0f4;
       margin-top: 6mm;
-    }
-
-    .note {
-      background: #fff7e8;
-      border-left: 4px solid #f0b65b;
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin: 4mm 0;
-    }
-
-    .success {
-      background: #eef9f0;
-      border-left: 4px solid #44a35f;
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin: 4mm 0;
-    }
-
-    .small {
-      font-size: 11px;
-    }
-
-    .footer {
-      margin-top: 10mm;
-      font-size: 10.5px;
-      color: var(--muted);
-      text-align: right;
-    }
-
-    .page-break {
-      page-break-before: always;
-      break-before: page;
+      padding-top: 4mm;
+      border-top: 1px solid #edf0f5;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       margin: 3mm 0 4mm;
-      font-size: 11.5px;
+      font-size: 11.6px;
     }
 
     th, td {
@@ -188,8 +147,28 @@
     }
 
     th {
-      background: #f2f4fa;
+      background: #f3f5fb;
       color: var(--brand);
+    }
+
+    .note {
+      background: #fef5e7;
+      border-left: 4px solid #efb45a;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin: 4mm 0;
+    }
+
+    .footer {
+      margin-top: 10mm;
+      text-align: right;
+      font-size: 10.5px;
+      color: var(--muted);
+    }
+
+    .page-break {
+      page-break-before: always;
+      break-before: page;
     }
 
     @media print {
@@ -201,8 +180,8 @@
         width: auto;
         min-height: auto;
         margin: 0;
-        box-shadow: none;
         padding: 0;
+        box-shadow: none;
       }
 
       .cover {
@@ -217,12 +196,12 @@
   <div class="page">
     <section class="cover">
       <div>
-        <div class="eyebrow">Application Documentation</div>
-        <h1>Budget Flow</h1>
-        <p class="muted">Professional product, deployment, and operations documentation for the current live Render-based release.</p>
+        <div class="eyebrow">Project Documentation</div>
+        <h1>Budget Flow Web Application</h1>
+        <p class="muted">A simple and professional guide to understanding, running, and deploying the Budget Flow project.</p>
       </div>
 
-      <div class="summary-grid">
+      <div class="grid grid-3">
         <div class="card">
           <strong>Frontend</strong>
           <div class="url">https://bf-web.onrender.com</div>
@@ -237,285 +216,318 @@
         </div>
       </div>
 
-      <div class="meta">
+      <div class="grid grid-3">
         <div class="card">
           <strong>Version</strong>
-          <span>1.0</span>
+          <span>1.1</span>
         </div>
         <div class="card">
           <strong>Date</strong>
           <span>March 31, 2026</span>
         </div>
         <div class="card">
-          <strong>Prepared For</strong>
-          <span>Product handoff, review, and operations</span>
+          <strong>Hosting</strong>
+          <span>Render</span>
         </div>
       </div>
     </section>
 
     <section class="section">
-      <h2>1. Executive Summary</h2>
-      <p>Budget Flow is a web-based personal finance application that combines sign-up, onboarding, budgeting, savings tracking, reporting, currency-aware display, and AI-guided support in one user experience.</p>
-      <p>The current production environment is deployed on Render as a three-service architecture: a frontend web app, an authentication API, and a feature API backed by a shared PostgreSQL database. Groq is the current live AI provider, while Flowise remains optional.</p>
-      <div class="success">
-        <strong>Current live deployment</strong>
-        <div class="small">The application is currently reachable through the frontend at <span class="url">https://bf-web.onrender.com</span>.</div>
-      </div>
-    </section>
-
-    <section class="section">
-      <h2>2. Product Overview</h2>
-      <div class="info-grid">
-        <div class="card">
-          <strong>Primary outcomes</strong>
-          <ul>
-            <li>Track income, expenses, and budget usage</li>
-            <li>Organize spending into monthly categories</li>
-            <li>Monitor savings goals and progress</li>
-            <li>Understand financial status through dashboards and reports</li>
-          </ul>
-        </div>
-        <div class="card">
-          <strong>Core experience</strong>
-          <ul>
-            <li>Email/password and Google sign-in</li>
-            <li>Country, language, and currency onboarding</li>
-            <li>Responsive dashboard and transaction management</li>
-            <li>AI assistant with finance-aware context</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <h2>3. Live Deployment Summary</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Service</th>
-            <th>Purpose</th>
-            <th>Live URL</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Frontend</td>
-            <td>Authentication pages and main user interface</td>
-            <td class="url">https://bf-web.onrender.com</td>
-          </tr>
-          <tr>
-            <td>Auth API</td>
-            <td>Registration, login, password reset, Google sign-in, token validation</td>
-            <td class="url">https://bf-auth-api.onrender.com</td>
-          </tr>
-          <tr>
-            <td>Feature API</td>
-            <td>Dashboard, transactions, budgets, savings, reports, settings, assistant, notifications</td>
-            <td class="url">https://bf-feature-api.onrender.com</td>
-          </tr>
-          <tr>
-            <td>PostgreSQL</td>
-            <td>Shared data layer for auth and feature domains</td>
-            <td>Internal Render database</td>
-          </tr>
-        </tbody>
-      </table>
-      <p>The frontend is configured to call the live APIs through deploy-time runtime configuration. Both backend services connect to the same PostgreSQL database and share the same JWT secret.</p>
-    </section>
-
-    <section class="section">
-      <h2>4. User Modules</h2>
-      <h3>Authentication</h3>
-      <p>Users can register, sign in, sign in with Google, request a password reset, and complete password reset through a tokenized reset page.</p>
-      <h3>Dashboard</h3>
-      <p>The dashboard summarizes expenses, income, budget progress, and current-period overview data in a simple, readable layout.</p>
-      <h3>Budgeting</h3>
-      <p>Users can set a monthly budget, define budget categories, log or correct category spending, and edit or delete categories when needed.</p>
-      <h3>Transactions</h3>
-      <p>The transaction module supports entry creation, category assignment, date selection, history browsing, and protected deletion flows.</p>
-      <h3>Savings</h3>
-      <p>Users can create savings goals, define target amounts, add deposits, make withdrawals, and update or delete goals.</p>
-      <h3>Reports and Assistant</h3>
-      <p>The reporting module provides financial summaries, while the assistant uses live finance context to answer user questions through Groq or a safe local fallback.</p>
-    </section>
-
-    <section class="page-break section">
-      <h2>5. Architecture</h2>
-      <h3>Frontend Layer</h3>
-      <p>The frontend is split between the authentication experience and the main application experience. Runtime configuration allows the same frontend code to target local development, Render deployment, or alternative hosting without rebuilding the app for each environment.</p>
-      <h3>Backend Layer</h3>
-      <p>The platform uses two Bun + Express services. The auth backend owns identity-related flows, while the feature backend owns finance workflows, preferences, assistant behavior, and reporting.</p>
-      <h3>Data Layer</h3>
-      <p>PostgreSQL is the system of record for users, reset tokens, transactions, budgets, savings, profile settings, notification settings, and assistant-facing finance context.</p>
-      <h3>Render Topology</h3>
-      <p>The current Render release uses separate public services for the frontend and the two backend APIs, with one shared private Postgres instance. This keeps the UI lightweight while allowing the finance API and auth API to evolve independently.</p>
-    </section>
-
-    <section class="section">
-      <h2>6. Third-Party Integrations</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Integration</th>
-            <th>Purpose</th>
-            <th>Current role</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Groq</td>
-            <td>AI assistant responses</td>
-            <td>Current live assistant provider</td>
-          </tr>
-          <tr>
-            <td>ExchangeRate-API</td>
-            <td>Display-currency conversion</td>
-            <td>Supports user-facing currency view changes</td>
-          </tr>
-          <tr>
-            <td>Google Identity</td>
-            <td>Federated sign-in</td>
-            <td>Optional, configured through the auth backend</td>
-          </tr>
-          <tr>
-            <td>Email provider</td>
-            <td>Password reset delivery</td>
-            <td>Supported by the auth flow; final provider strategy should match the Render plan</td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="note">
-        <strong>Operational note</strong>
-        <div class="small">Free Render web services restrict outbound SMTP ports. For password reset at scale, a paid auth instance or an HTTP email API is the safer production path.</div>
-      </div>
-    </section>
-
-    <section class="section">
-      <h2>7. Security and Identity</h2>
+      <h2>1. Project Overview</h2>
+      <p>Budget Flow is a financial management web application that helps users track income and expenses, manage budgets, monitor savings goals, and understand spending habits more clearly.</p>
+      <p>The main purpose of the system is to simplify personal finance management and give users practical insight into how they use money over time.</p>
       <ul>
-        <li>JWT-based authentication is shared across the auth and feature services.</li>
-        <li>Google sign-in requires a matching `GOOGLE_CLIENT_ID` on the auth backend and the frontend origin to be listed in Google Cloud as an authorized JavaScript origin.</li>
-        <li>Password reset uses secure time-limited tokens and a reset flow tied to the configured client URL.</li>
-        <li>Irreversible actions such as deleting transactions, savings goals, categories, and accounts are protected with explicit confirmation UX.</li>
+        <li>track income and expenses</li>
+        <li>manage budgets</li>
+        <li>visualize financial data</li>
+        <li>get quick assistance from an AI finance assistant</li>
       </ul>
     </section>
 
     <section class="section">
-      <h2>8. API Summary</h2>
-      <h3>Auth API Base URL</h3>
-      <p class="url">https://bf-auth-api.onrender.com/api/auth</p>
+      <h2>2. Objectives</h2>
+      <ul>
+        <li>Provide a simple platform for tracking finances</li>
+        <li>Help users make better financial decisions</li>
+        <li>Automate calculations and budgeting logic</li>
+        <li>Offer visual insights through the dashboard and reports</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>3. System Architecture</h2>
+      <p>The project follows a multi-layer architecture:</p>
+      <div class="card">
+        <div class="url">Frontend (UI)<br>↓<br>Backend APIs (Auth + Feature services)<br>↓<br>Database (PostgreSQL)</div>
+      </div>
+
+      <h3>Frontend</h3>
+      <p>The frontend uses HTML, CSS, and JavaScript. It handles UI rendering, user interaction, and navigation between screens.</p>
+
+      <h3>Backend</h3>
+      <p>The backend is split into two services.</p>
+      <ul>
+        <li><strong>Auth Backend:</strong> user registration, login, password reset, Google sign-in, and JWT authentication</li>
+        <li><strong>Feature Backend:</strong> budgets, transactions, savings, reports, settings, and financial operations</li>
+      </ul>
+
+      <h3>Database</h3>
+      <p>PostgreSQL stores the application data, including users, transactions, budgets, savings data, and user settings.</p>
+    </section>
+
+    <section class="section">
+      <h2>4. Project Structure</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Path</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>`Budget-Flow/backend/`</td>
+            <td>Authentication service</td>
+          </tr>
+          <tr>
+            <td>`budget-flow-unified-backend/`</td>
+            <td>Feature service</td>
+          </tr>
+          <tr>
+            <td>`Budget-Flow/`</td>
+            <td>Auth frontend pages</td>
+          </tr>
+          <tr>
+            <td>`Budget-Flow-feature-ohene/Budget-Flow-feature-ohene/`</td>
+            <td>Main application UI</td>
+          </tr>
+          <tr>
+            <td>`deployment/`</td>
+            <td>Deployment and container configuration</td>
+          </tr>
+          <tr>
+            <td>`start-workflow.cmd`</td>
+            <td>Local workflow starter</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="page-break section">
+      <h2>5. Installation and Setup</h2>
+      <h3>Requirements</h3>
+      <ul>
+        <li>Bun</li>
+        <li>PostgreSQL</li>
+        <li>Git</li>
+      </ul>
+
+      <h3>Step 1: Clone the repository</h3>
+      <div class="card">
+        <div class="url">git clone https://github.com/hmekpe/Budget-Flow.git<br>cd Budget-Flow</div>
+      </div>
+
+      <h3>Step 2: Install dependencies</h3>
+      <p>Install dependencies in both backend folders.</p>
+      <div class="card">
+        <div class="url">cd Budget-Flow/backend<br>bun install</div>
+      </div>
+      <div class="card" style="margin-top:8px;">
+        <div class="url">cd ../../budget-flow-unified-backend<br>bun install</div>
+      </div>
+
+      <h3>Step 3: Set up environment variables</h3>
+      <p>Create a `.env` file in each backend.</p>
+      <div class="card">
+        <div class="url">DATABASE_URL=postgresql://user:password@localhost:5432/budget_flow<br>JWT_SECRET=your_secret<br>CLIENT_URL=http://localhost:5500</div>
+      </div>
+      <p>Important:</p>
+      <ul>
+        <li>both backends must use the same `JWT_SECRET`</li>
+        <li>both backends should connect to the same PostgreSQL database</li>
+      </ul>
+
+      <h3>Step 4: Run the project</h3>
+      <div class="card">
+        <div class="url">.\start-workflow.cmd</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>6. Authentication System</h2>
+      <p>Budget Flow uses JWT for authentication.</p>
+      <ol>
+        <li>User registers or logs in</li>
+        <li>Server generates a token</li>
+        <li>Token is stored on the client</li>
+        <li>Token is used for protected API requests</li>
+      </ol>
+      <p>The auth backend also supports Google sign-in and password reset.</p>
+    </section>
+
+    <section class="section">
+      <h2>7. Core Functionalities</h2>
+      <h3>Budget Management</h3>
+      <ul>
+        <li>Create budgets</li>
+        <li>Assign categories</li>
+        <li>Track spending</li>
+      </ul>
+      <h3>Transactions</h3>
+      <ul>
+        <li>Add income and expenses</li>
+        <li>Categorize transactions</li>
+        <li>Review transaction history</li>
+      </ul>
+      <h3>Dashboard</h3>
+      <ul>
+        <li>Financial overview</li>
+        <li>Budget progress</li>
+        <li>Charts and analytics</li>
+      </ul>
+      <h3>Advanced Features</h3>
+      <ul>
+        <li>Notifications and reminders</li>
+        <li>AI financial assistant</li>
+        <li>Multi-currency display support</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>8. Database Design</h2>
+      <p>The database uses PostgreSQL and includes core tables such as users and transactions.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Users</th>
+            <th>Transactions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>id<br>email<br>password<br>created_at</td>
+            <td>id<br>user_id<br>amount<br>category<br>date<br>type</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>The system also includes supporting tables for budgets, savings, settings, and password reset tokens.</p>
+    </section>
+
+    <section class="page-break section">
+      <h2>9. API Overview</h2>
+      <h3>Auth APIs</h3>
       <ul>
         <li>`POST /register`</li>
         <li>`POST /login`</li>
         <li>`POST /forgot-password`</li>
         <li>`POST /reset-password`</li>
-        <li>`GET /me`</li>
-        <li>`GET /config`</li>
         <li>`POST /google`</li>
+        <li>`GET /me`</li>
       </ul>
-      <h3>Feature API Base URL</h3>
-      <p class="url">https://bf-feature-api.onrender.com/api</p>
+
+      <h3>Feature APIs</h3>
       <ul>
-        <li>Meta, dashboard, app bootstrap, budgets, transactions, savings, reports, settings, push, assistant, chat, and AI tool endpoints</li>
-        <li>Health check at <span class="url">/api/health</span></li>
+        <li>`GET /transactions`</li>
+        <li>`POST /transactions`</li>
+        <li>`DELETE /transactions/:id`</li>
+        <li>`GET /budgets/current`</li>
+        <li>`GET /budgets/categories`</li>
+        <li>`GET /dashboard/summary`</li>
+        <li>`GET /reports/current`</li>
+      </ul>
+
+      <h3>Third-Party APIs</h3>
+      <h3>Groq API</h3>
+      <ul>
+        <li>Used for the AI chatbot</li>
+        <li>Endpoint: <span class="url">POST https://api.groq.com/openai/v1/chat/completions</span></li>
+        <li>Authentication: `GROQ_API_KEY`</li>
+        <li>Current model: `openai/gpt-oss-20b`</li>
+      </ul>
+      <p>Implemented in:</p>
+      <ul>
+        <li>`assistant.service.js`</li>
+        <li>`assistant-config.service.js`</li>
+      </ul>
+
+      <h3>ExchangeRate-API</h3>
+      <ul>
+        <li>Used for currency conversion</li>
+        <li>Endpoint: <span class="url">https://open.er-api.com/v6/latest</span></li>
+        <li>No API key required</li>
+        <li>Updates once per day</li>
+        <li>Free tier rate-limited</li>
+      </ul>
+      <p>Implemented in:</p>
+      <ul>
+        <li>`exchange-rates.service.js`</li>
       </ul>
     </section>
 
     <section class="section">
-      <h2>9. Current Render Configuration</h2>
-      <h3>Frontend</h3>
-      <p>The frontend service uses runtime env values so the browser can reach the live backend services without hardcoded domains.</p>
+      <h2>10. Deployment</h2>
+      <p>Budget Flow is currently deployed on Render.</p>
       <table>
         <thead>
           <tr>
-            <th>Variable</th>
-            <th>Value</th>
+            <th>Service</th>
+            <th>URL</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>AUTH_API_BASE_URL</td>
-            <td class="url">https://bf-auth-api.onrender.com/api/auth</td>
+            <td>Frontend</td>
+            <td class="url">https://bf-web.onrender.com</td>
           </tr>
           <tr>
-            <td>FEATURE_API_BASE_URL</td>
-            <td class="url">https://bf-feature-api.onrender.com/api</td>
+            <td>Auth API</td>
+            <td class="url">https://bf-auth-api.onrender.com</td>
+          </tr>
+          <tr>
+            <td>Feature API</td>
+            <td class="url">https://bf-feature-api.onrender.com</td>
           </tr>
         </tbody>
       </table>
 
-      <h3>Auth Backend</h3>
-      <p>The auth service requires a live database URL, shared JWT secret, trusted frontend origin, Google client ID, and email provider configuration when password reset email is enabled.</p>
-
-      <h3>Feature Backend</h3>
-      <p>The feature service requires the same database, the same JWT secret as the auth backend, the live frontend origin, and Groq configuration. The current production setup keeps Flowise disabled.</p>
-    </section>
-
-    <section class="page-break section">
-      <h2>10. Operations Checklist</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Check</th>
-            <th>Expected outcome</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Frontend health</td>
-            <td>Auth page loads successfully</td>
-          </tr>
-          <tr>
-            <td>Auth health endpoint</td>
-            <td>Returns JSON from <span class="url">/api/health</span></td>
-          </tr>
-          <tr>
-            <td>Feature health endpoint</td>
-            <td>Returns JSON from <span class="url">/api/health</span></td>
-          </tr>
-          <tr>
-            <td>Login flow</td>
-            <td>User reaches the app after successful authentication</td>
-          </tr>
-          <tr>
-            <td>Dashboard bootstrap</td>
-            <td>App data loads without same-origin API errors</td>
-          </tr>
-          <tr>
-            <td>Assistant test</td>
-            <td>Assistant returns a Groq-backed or fallback response</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-
-    <section class="section">
-      <h2>11. Troubleshooting Guide</h2>
-      <h3>Frontend loads but actions fail</h3>
-      <p>Check the frontend runtime configuration, backend origin values, and CORS-related environment variables.</p>
-      <h3>Backend fails with ENOTFOUND</h3>
-      <p>This usually means the database URL is wrong, copied from the wrong Render account, or the database and service are in different regions.</p>
-      <h3>Google sign-in fails</h3>
-      <p>Check the Google client ID, the authorized JavaScript origin list, and test-user access if the Google app is still in testing mode.</p>
-      <h3>Password reset email fails</h3>
-      <p>Check the email provider configuration and confirm the Render plan supports the chosen delivery method.</p>
-    </section>
-
-    <section class="section">
-      <h2>12. Product Strengths and Current Notes</h2>
+      <p>The working hosted setup uses:</p>
       <ul>
-        <li>Clear separation of responsibilities between auth and finance domains</li>
-        <li>Runtime-config frontend design that supports multiple environments cleanly</li>
-        <li>Responsive UX improvements across desktop and mobile</li>
-        <li>Safer destructive actions through confirmation flows</li>
-        <li>AI fallback behavior when live model access is unavailable</li>
-        <li>Future flexibility to remain on Render or move to another hosting model later</li>
+        <li>one frontend service</li>
+        <li>one auth backend service</li>
+        <li>one feature backend service</li>
+        <li>one shared PostgreSQL database</li>
       </ul>
+
+      <div class="note">
+        <strong>Important deployment rule</strong>
+        <div>Both backend services must use the same `JWT_SECRET`, the same database, and the same Render region as the database.</div>
+      </div>
     </section>
 
     <section class="section">
-      <h2>13. Conclusion</h2>
-      <p>Budget Flow is now deployed as a structured web application with a clear frontend, authentication backend, feature backend, shared database, and active AI integration path. The current Render deployment is suitable for demonstrations, stakeholder review, and iterative product growth. The repository also remains organized enough for future migration if the team decides to adopt a different hosting or email-delivery strategy.</p>
+      <h2>11. How to Run the App Successfully</h2>
+      <ol>
+        <li>Install Bun, PostgreSQL, and Git</li>
+        <li>Clone the repository</li>
+        <li>Install dependencies in both backend folders</li>
+        <li>Create valid `.env` files for both services</li>
+        <li>Use the same database and JWT secret for both backends</li>
+        <li>Run the local workflow or deploy the services in the correct order</li>
+      </ol>
+      <p>For hosted deployment, the safest order is:</p>
+      <ol>
+        <li>Create the database</li>
+        <li>Deploy the auth backend</li>
+        <li>Deploy the feature backend</li>
+        <li>Deploy the frontend</li>
+        <li>Point the frontend to the live backend URLs</li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <h2>12. Conclusion</h2>
+      <p>Budget Flow is a complete web application for personal finance management. It combines a clear frontend, a split backend architecture, PostgreSQL data storage, and useful third-party integrations like Groq and ExchangeRate-API to provide a practical and modern budgeting experience.</p>
+      <p>With the correct setup, the project can be run locally for development or deployed on Render for production use.</p>
       <div class="footer">Budget Flow Documentation • March 31, 2026</div>
     </section>
   </div>
